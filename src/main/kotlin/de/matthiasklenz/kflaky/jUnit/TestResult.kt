@@ -1,47 +1,68 @@
 package de.matthiasklenz.kflaky.jUnit
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
-data class TestResult(
-    @JacksonXmlProperty(isAttribute = false, localName = "testsuite")
-    val testsuite: List<TestSuite>
-)
+@JacksonXmlRootElement(localName = "testsuite")
+class TestSuite {
+    @JacksonXmlProperty(isAttribute = true)
+    var name: String = ""
 
-data class TestSuite(
     @JacksonXmlProperty(isAttribute = true)
-    val name: String,
-    @JacksonXmlProperty(isAttribute = true)
-    val tests: String,
-    @JacksonXmlProperty(isAttribute = true)
-    val skipped: String,
-    @JacksonXmlProperty(isAttribute = true)
-    val failures: String,
-    @JacksonXmlProperty(isAttribute = true)
-    val errors: String,
-    @JacksonXmlProperty(isAttribute = true)
-    val timestamp: String,
-    @JacksonXmlProperty(isAttribute = true)
-    val hostname: String,
-    @JacksonXmlProperty(isAttribute = true)
-    val time: String,
-    @JacksonXmlProperty(isAttribute = false, localName = "testcase")
-    val testcase: List<TestCase>
-)
+    var tests: String = ""
 
-data class TestCase(
     @JacksonXmlProperty(isAttribute = true)
-    val name: String,
+    var skipped: String = ""
+
     @JacksonXmlProperty(isAttribute = true)
-    val classname: String,
+    var failures: String = ""
+
     @JacksonXmlProperty(isAttribute = true)
-    val time: String,
+    var errors: String = ""
+
+    @JacksonXmlProperty(isAttribute = true)
+    var timestamp: String = ""
+
+    @JacksonXmlProperty(isAttribute = true)
+    var hostname: String = ""
+
+    @JacksonXmlProperty(isAttribute = true)
+    var time: String = ""
+
+    var properties: TestSuiteProperties? = null
+
+    @JacksonXmlProperty(localName = "system-out")
+    var systemOut: String? = null
+
+
+    @JacksonXmlProperty(localName = "system-err")
+    var systemErr: String? = null
+
+    @JacksonXmlElementWrapper(useWrapping = false, localName = "testcase")
+    var testcase: List<TestCase>? = null
+}
+
+class TestSuiteProperties
+
+class TestCase {
+    @JacksonXmlProperty(isAttribute = true)
+    var name: String = ""
+
+    @JacksonXmlProperty(isAttribute = true)
+    var classname: String = ""
+
+    @JacksonXmlProperty(isAttribute = true)
+    var time: String = ""
+
     @JacksonXmlProperty(isAttribute = false, localName = "failure")
-    val failure: Failure? = null
-)
+    var failure: Failure? = null
+}
 
-data class Failure(
+class Failure {
     @JacksonXmlProperty(isAttribute = true)
-    val message: String,
+    var message: String = ""
+
     @JacksonXmlProperty(isAttribute = true)
-    val type: String
-)
+    var type: String = ""
+}
