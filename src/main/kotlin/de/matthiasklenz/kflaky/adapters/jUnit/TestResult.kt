@@ -1,4 +1,4 @@
-package de.matthiasklenz.kflaky.jUnit
+package de.matthiasklenz.kflaky.adapters.jUnit
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty

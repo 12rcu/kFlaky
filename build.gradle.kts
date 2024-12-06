@@ -1,30 +1,7 @@
 plugins {
-    kotlin("jvm") version "2.0.20"
-    `java-gradle-plugin`
-    id("com.gradle.plugin-publish") version "1.2.1"
-    //id("de.matthiasklenz.kflaky.kflaky")
+    kotlin("jvm") version "2.1.0"
+    kotlin("plugin.serialization") version "2.1.0"
 }
-
-gradlePlugin {
-    website = "https://github.com/ysb33r/gradleTest"
-    vcsUrl = "https://github.com/ysb33r/gradleTest.git"
-    plugins {
-        create("kFlaky") {
-            id = "de.matthiasklenz.kflaky.kflaky"
-            implementationClass = "de.matthiasklenz.kflaky.KFlaky"
-        }
-    }
-}
-
-publishing {
-    repositories {
-        maven {
-            name = "localPluginRepository"
-            url = uri("../local-plugin-repository")
-        }
-    }
-}
-
 
 group = "de.matthiasklenz"
 version = "0.2"
@@ -36,6 +13,7 @@ repositories {
 dependencies {
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     testImplementation(kotlin("test"))
 }
 
