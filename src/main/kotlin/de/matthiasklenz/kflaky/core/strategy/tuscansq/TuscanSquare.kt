@@ -3,7 +3,7 @@ package de.matthiasklenz.kflaky.core.strategy.tuscansq
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TuscanCalulation(
+data class TuscanCalculation(
     val size: Int,
     val matrix: List<List<Int>>
 )
@@ -12,5 +12,5 @@ data class TuscanCalulation(
 data class AllTuscanCalculations(
     val minMatrixSize: Int,
     val maxMatrixSize: Int,
-    val matrixis: List<TuscanCalulation>
+    val matrixis: List<TuscanCalculation>
 )

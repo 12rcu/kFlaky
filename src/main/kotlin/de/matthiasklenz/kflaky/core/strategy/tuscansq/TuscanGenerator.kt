@@ -6,12 +6,12 @@ import java.io.File
 import java.io.FileNotFoundException
 
 class TuscanGenerator {
-    fun generate(n: Int): TuscanCalulation {
+    fun generate(n: Int): TuscanCalculation {
         return generateTuscanSquare(n)
     }
 
     fun generate(): File {
-        val calculations = mutableListOf<TuscanCalulation>()
+        val calculations = mutableListOf<TuscanCalculation>()
         val min = 2
         val max = 100
         for (i in min..max) {
@@ -36,9 +36,9 @@ class TuscanGenerator {
         System.arraycopy(a, 0, r[i], 0, a.size)
     }
 
-    private fun generateTuscanSquare(n: Int): TuscanCalulation {
+    private fun generateTuscanSquare(n: Int): TuscanCalculation {
         if (n == 3) {
-            return TuscanCalulation(
+            return TuscanCalculation(
                 size = 3,
                 listOf(
                     listOf(1, 2, 3),
@@ -47,7 +47,7 @@ class TuscanGenerator {
             )
         }
         if (n == 5) {
-            return TuscanCalulation(
+            return TuscanCalculation(
                 size = 5,
                 listOf(
                     listOf(1, 2, 3, 4, 5),
@@ -181,6 +181,6 @@ class TuscanGenerator {
             matrix.add(current)
         }
 
-        return TuscanCalulation(n, matrix)
+        return TuscanCalculation(n, matrix)
     }
 }
