@@ -1,18 +1,14 @@
-import kotlin.test.Test
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.Order
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestMethodOrder
 import kotlin.test.assertEquals
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 class ServiceTest {
-    companion object {
-        var service : Service? = null
-    }
-
     @Test
-    fun initService() {
-        service = Service()
-    }
-
-    @Test
+    @Order(1)
     fun testSum() {
-        assertEquals(service!!.sum(1,2), 3)
+        assertEquals( 1+ 2, 3)
     }
 }

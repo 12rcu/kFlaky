@@ -1,11 +1,12 @@
-package de.matthiasklenz.kflaky.core.tasks
+package de.matthiasklenz.kflaky.adapters.jUnit
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import de.matthiasklenz.kflaky.adapters.jUnit.TestSuite
+import de.matthiasklenz.kflaky.core.tasks.CollectResults
 import java.nio.file.Path
 
-class CollectResult {
-    fun collect(testResultsDir: Path) {
+class JUnitResultCollection : CollectResults {
+    override fun collect(buildPath: Path) {
+        val testResultsDir = buildPath.resolve("test-results")
         val mapper = XmlMapper()
         val results = testResultsDir
             .toFile()
