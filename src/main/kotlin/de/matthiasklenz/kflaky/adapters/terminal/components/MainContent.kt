@@ -1,9 +1,12 @@
-package de.matthiasklenz.kflaky.adapters.terminal
+package de.matthiasklenz.kflaky.adapters.terminal.components
 
+import de.matthiasklenz.kflaky.adapters.terminal.Apperance
+import de.matthiasklenz.kflaky.adapters.terminal.centerAndContain
+import de.matthiasklenz.kflaky.adapters.terminal.centerSring
+import de.matthiasklenz.kflaky.adapters.terminal.containLength
 import de.matthiasklenz.kflaky.core.project.ProjectProgress
 import de.matthiasklenz.kflaky.core.project.ProjectState
 import org.fusesource.jansi.Ansi.ansi
-import java.lang.StringBuilder
 
 /**
  * @param projects, if there is not enough space for all projects, the current project will be centered (not implemented)

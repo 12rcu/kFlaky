@@ -1,5 +1,8 @@
-package de.matthiasklenz.kflaky.adapters.terminal
+package de.matthiasklenz.kflaky.adapters.terminal.components
 
+import de.matthiasklenz.kflaky.adapters.terminal.Apperance
+import de.matthiasklenz.kflaky.adapters.terminal.centerSring
+import de.matthiasklenz.kflaky.adapters.terminal.containLength
 import org.fusesource.jansi.Ansi.ansi
 
 fun printHeader(width: Int, projectDevision: Int, testDevision: Int) {

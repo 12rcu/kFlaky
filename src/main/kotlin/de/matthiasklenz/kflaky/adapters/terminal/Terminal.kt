@@ -1,15 +1,15 @@
 package de.matthiasklenz.kflaky.adapters.terminal
 
+import de.matthiasklenz.kflaky.adapters.terminal.components.printFooter
+import de.matthiasklenz.kflaky.adapters.terminal.components.printHeader
+import de.matthiasklenz.kflaky.adapters.terminal.components.printMainConent
 import de.matthiasklenz.kflaky.core.project.ProjectProgress
 import de.matthiasklenz.kflaky.core.project.ProjectState
 import de.matthiasklenz.kflaky.core.project.TestProgress
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import org.fusesource.jansi.Ansi
 import org.fusesource.jansi.Ansi.ansi
 import org.fusesource.jansi.AnsiConsole
 import org.jline.terminal.TerminalBuilder
-import java.lang.StringBuilder
 
 object Apperance {
     const val BG = 0x662F4D
@@ -64,6 +64,7 @@ suspend fun createTerminal() = coroutineScope {
     print(ansi().eraseScreen())
     printHeader(width, 20, 60)
     printMainConent(mokPorjects, width, height - 5, 20, 60)
+    printFooter(width, 20, 60)
 
 
     //println(ansi().fg(Ansi.Color.BLUE).a("Height: $height").fg(Ansi.Color.GREEN).a(" width: $width").reset())
