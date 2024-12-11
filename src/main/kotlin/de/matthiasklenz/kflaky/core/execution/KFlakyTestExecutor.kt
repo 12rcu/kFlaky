@@ -5,6 +5,7 @@ import de.matthiasklenz.kflaky.core.strategy.TestExecutionStrategy
 import de.matthiasklenz.kflaky.core.tasks.collectTestFiles
 import de.matthiasklenz.kflaky.core.tasks.modify.disableTestSuit
 import de.matthiasklenz.kflaky.core.tasks.modify.tuskanSquareModify
+import kotlin.io.path.absolutePathString
 
 class KFlakyTestExecutor(private val projectConfig: ProjectConfig) {
     private var orders: List<TestOrders> = listOf()
@@ -12,12 +13,12 @@ class KFlakyTestExecutor(private val projectConfig: ProjectConfig) {
 
     fun runProject() {
         setup()
-        runTests()
+        runTestOrders()
         cleanup()
     }
 
     private fun setup() {
-        val testFiles = collectTestFiles(projectConfig)
+        val testFiles = collectTestFiles(projectConfig).toList()
         orders = when(projectConfig.strategy) {
             TestExecutionStrategy.TUSCAN_SQUARES -> testFiles.map {
                 val orders = tuskanSquareModify(projectConfig.framworkConfig, it.content)
@@ -31,6 +32,7 @@ class KFlakyTestExecutor(private val projectConfig: ProjectConfig) {
     }
 
     private fun runTestOrders() {
+        val runs = orders.maxOf { it.generatedOrders.size }
         for (i in 0 until testSuiteMostRuns) {
             overwriteTestContent(i)
             runTests()

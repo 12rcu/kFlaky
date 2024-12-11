@@ -2,6 +2,7 @@ package de.matthiasklenz.kflaky.core.tasks
 
 import de.matthiasklenz.kflaky.core.project.ProjectConfig
 import java.io.File
+import kotlin.io.path.absolutePathString
 import kotlin.io.path.walk
 
 fun collectTestFiles(projectConfig: ProjectConfig): Sequence<TestFile> {

@@ -6,7 +6,10 @@ import de.matthiasklenz.kflaky.adapters.terminal.components.printMainConent
 import de.matthiasklenz.kflaky.core.project.ProjectProgress
 import de.matthiasklenz.kflaky.core.project.ProjectState
 import de.matthiasklenz.kflaky.core.project.TestProgress
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.fusesource.jansi.Ansi.ansi
 import org.fusesource.jansi.AnsiConsole
 import org.jline.terminal.TerminalBuilder
@@ -61,13 +64,17 @@ suspend fun createTerminal() = coroutineScope {
 
     AnsiConsole.systemInstall()
 
-    print(ansi().eraseScreen())
-    printHeader(width, 20, 60)
-    printMainConent(mokPorjects, width, height - 5, 20, 60)
-    printFooter(width, 20, 60)
+    val channel = Channel<List<ProjectProgress>>()
 
+    launch {
+        delay(1000)
+        channel.send(mokPorjects)
+        delay(5000)
+        channel.close()
+    }
 
-    //println(ansi().fg(Ansi.Color.BLUE).a("Height: $height").fg(Ansi.Color.GREEN).a(" width: $width").reset())
+    val render = projectRender(width to height, channel)
+    render.await()
 
     AnsiConsole.systemUninstall()
 }

@@ -42,7 +42,8 @@ class TuscanGenerator {
                 size = 3,
                 listOf(
                     listOf(1, 2, 3),
-                    listOf(3, 2, 1)
+                    listOf(3, 2, 1),
+                    listOf(2,1,3)
                 )
             )
         }

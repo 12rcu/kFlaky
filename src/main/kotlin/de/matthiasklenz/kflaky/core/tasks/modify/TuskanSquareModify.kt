@@ -24,7 +24,7 @@ fun tuskanSquareModify(config: TestFramworkConfig, testFileContent: String): Lis
 }
 
 private fun String.applyImports(config: TestFramworkConfig): String {
-    return TextModifyUtil.addImports(this, config.collectedImports.joinToString { Plattform.lineSeperator })
+    return TextModifyUtil.addImports(this, config.imports.joinToString(Plattform.lineSeperator))
 }
 
 private fun String.applyOrderAddnotationClass(config: TestFramworkConfig): String {

@@ -1,0 +1,9 @@
+{
+    "framework": "junit",
+    "language": "kotlin",
+    "testExecutionCommand": "gradelw test",
+    "testExecutionDir": "",
+    "testDir": "src/test/kotlin",
+    "testResultDir": "build/test-results",
+    "strategy": "TUSCAN_SQUARES"
+}

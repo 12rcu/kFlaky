@@ -9,7 +9,7 @@ interface TestFramworkConfig {
     val lanaguage: Language
     val testAnnotation: Regex
 
-    val collectedImports: MutableSet<String>
+    val imports: MutableSet<String>
 
     /**
      * the ignore annotation

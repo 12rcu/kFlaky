@@ -5,8 +5,7 @@ import java.nio.file.Path
 
 class ProjectConfig (
     val framworkConfig: TestFramworkConfig,
-    val executeTests: String,
-    val buildDir: Path,
+    val testResultDir: Path,
     val testSrcDir: Path,
     val strategy: TestExecutionStrategy
 )
