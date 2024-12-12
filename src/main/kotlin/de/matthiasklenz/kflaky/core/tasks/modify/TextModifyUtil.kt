@@ -20,7 +20,7 @@ object TextModifyUtil {
         return regex.replace(content) {
             val text = it.value
             val prefix = content.substring(0, it.range.first).split(Plattform.lineSeperator).last() //get the whitespace before the test
-            val result = "${prefix}${insertText(counter)}${Plattform.lineSeperator}" +
+            val result = "${insertText(counter)}${Plattform.lineSeperator}" +
             "${prefix}${text}"
             counter ++
             return@replace result
