@@ -6,6 +6,7 @@ import de.matthiasklenz.kflaky.adapters.project.ProjectConfigDto
 import de.matthiasklenz.kflaky.adapters.terminal.createTerminal
 import de.matthiasklenz.kflaky.core.execution.KFlakyTestExecutor
 import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
@@ -16,9 +17,12 @@ fun main(args: Array<String>) = runBlocking {
     val projects = Paths.get("configs").toFile().walk().filter { it.name.endsWith(".json") }.map {
         Json.decodeFromString<ProjectConfigDto>(it.readText()).map()
     }.toList()
+    val chanel = Channel<String>()
 
     val job = launch {
-        KFlakyTestExecutor(projects[0]).runProject()
+        KFlakyTestExecutor(projects[1], chanel).also {
+            it.runProject()
+        }
     }
 
     job.join()

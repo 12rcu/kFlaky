@@ -3,5 +3,18 @@ package de.matthiasklenz.kflaky.core.tasks
 import java.nio.file.Path
 
 interface CollectResults {
-    fun collect(buildPath: Path)
+    fun collect(resultsPath: Path): List<TestResultData>
+}
+
+data class TestResultData(
+    val testName: String,
+    val outcome: TestOutcome
+)
+
+enum class TestOutcome {
+    PASSED,
+    SKIPPED,
+    FAILED,
+    ERROR,
+    TIMEOUT
 }

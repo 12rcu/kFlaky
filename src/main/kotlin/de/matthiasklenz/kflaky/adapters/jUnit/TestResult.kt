@@ -3,6 +3,7 @@ package de.matthiasklenz.kflaky.adapters.jUnit
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText
 
 @JacksonXmlRootElement(localName = "testsuite")
 class TestSuite {
@@ -65,4 +66,7 @@ class Failure {
 
     @JacksonXmlProperty(isAttribute = true)
     var type: String = ""
+
+    @JacksonXmlText(value = true)
+    var text: String? = null
 }

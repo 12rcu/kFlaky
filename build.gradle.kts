@@ -1,6 +1,8 @@
 plugins {
     kotlin("jvm") version "2.1.0"
     kotlin("plugin.serialization") version "2.1.0"
+
+    `application`
 }
 
 group = "de.matthiasklenz"
@@ -8,6 +10,10 @@ version = "0.2"
 
 repositories {
     mavenCentral()
+}
+
+application {
+    mainClass.set("de.matthiasklenz.kflaky.KFlakyKt")
 }
 
 dependencies {
