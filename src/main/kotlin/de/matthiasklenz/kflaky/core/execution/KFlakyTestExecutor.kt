@@ -1,5 +1,6 @@
 package de.matthiasklenz.kflaky.core.execution
 
+import de.matthiasklenz.kflaky.adapters.persistence.SqlLiteDB
 import de.matthiasklenz.kflaky.core.project.ProjectConfig
 import de.matthiasklenz.kflaky.core.project.ProjectProgress
 import de.matthiasklenz.kflaky.core.project.ProjectState
@@ -8,14 +9,20 @@ import de.matthiasklenz.kflaky.core.tasks.TestFile
 import de.matthiasklenz.kflaky.core.tasks.collectTestFiles
 import de.matthiasklenz.kflaky.core.tasks.modify.disableTestSuit
 import de.matthiasklenz.kflaky.core.tasks.modify.tuskanSquareModify
+import de.matthiasklenz.kflaky.core.tasks.modify.tuskanSquareOrderGenerate
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.qualifier
 
-class KFlakyTestExecutor(private val projectConfig: ProjectConfig, private val projectProgress: List<ProjectProgress>) : KoinComponent {
+class KFlakyTestExecutor(
+    private val projectConfig: ProjectConfig,
+    private val projectProgress: List<ProjectProgress>,
+    private val runId: Int
+) : KoinComponent {
     private val progressChannel: Channel<List<ProjectProgress>> by inject(qualifier("progress"))
+    private val sqlLiteDB: SqlLiteDB by inject()
     private val progress = projectProgress.filter { it.name == projectConfig.identifier }
     private var orders: List<TestOrders> = listOf()
     private var testSuiteMostRuns = 0
@@ -40,11 +47,12 @@ class KFlakyTestExecutor(private val projectConfig: ProjectConfig, private val p
         testFiles = collectTestFiles(projectConfig).toList()
         orders = when (projectConfig.strategy) {
             TestExecutionStrategy.TUSCAN_SQUARES -> testFiles.map {
-                val orders = tuskanSquareModify(projectConfig.framworkConfig, it.content)
+                val runOrders = tuskanSquareOrderGenerate(projectConfig.framworkConfig, it.content)
+                val orders = tuskanSquareModify(runOrders, it.content, projectConfig.framworkConfig)
                 if (orders.size > testSuiteMostRuns) {
                     testSuiteMostRuns = orders.size
                 }
-                TestOrders(it.file, it.content, orders)
+                TestOrders(it.file, it.content, orders, runOrders)
             }.toList()
 
             else -> listOf()
@@ -62,7 +70,7 @@ class KFlakyTestExecutor(private val projectConfig: ProjectConfig, private val p
             progressChannel.send(projectProgress)
             overwriteTestContent(i)
             runTests()
-            evaluate()
+            evaluate(i)
         }
         progress.forEach { it.index = it.testsToRun }
     }
@@ -83,8 +91,16 @@ class KFlakyTestExecutor(private val projectConfig: ProjectConfig, private val p
         testCommand.executeTestCommand(projectConfig.testCommand, projectConfig.testExecutionPath.toFile())
     }
 
-    private fun evaluate() {
-        val results = projectConfig.testResultCollector.collect(projectConfig.testResultDir)
+    private fun evaluate(index: Int) {
+        projectConfig.testResultCollector.collect(projectConfig.testResultDir).forEach { result ->
+            val order = orders.first { it.content.contains(result.testSuite) && it.content.contains(result.testName) }
+            sqlLiteDB.addTestResult(
+                runId,
+                result,
+                projectConfig.identifier,
+                order.orders.matrix.getOrNull(index) ?: listOf()
+            )
+        }
     }
 
     private suspend fun cleanup() {

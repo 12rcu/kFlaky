@@ -18,6 +18,7 @@ class JUnitResultCollection : CollectResults {
             testSuite.testcase?.map { case ->
                 val outcome = if(case.failure == null) TestOutcome.PASSED else TestOutcome.FAILED
                 TestResultData(
+                    testSuite.name,
                     case.name,
                     outcome
                 )

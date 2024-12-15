@@ -2,6 +2,7 @@ package de.matthiasklenz.kflaky
 
 import de.matthiasklenz.kflaky.adapters.commandline.handleCommandLineArgs
 import de.matthiasklenz.kflaky.adapters.mapper.map
+import de.matthiasklenz.kflaky.adapters.persistence.SqlLiteDB
 import de.matthiasklenz.kflaky.adapters.project.ProjectConfigDto
 import de.matthiasklenz.kflaky.adapters.terminal.createTerminal
 import de.matthiasklenz.kflaky.core.execution.KFlakyTestExecutor
@@ -27,15 +28,19 @@ fun main(args: Array<String>) = runBlocking {
 
     val logChannel = Channel<String>()
     val progressChannel = Channel<List<ProjectProgress>>()
+    val db = SqlLiteDB()
 
     startKoin {
         modules(
             module {
                 single(qualifier = qualifier("log")) { logChannel }
                 single(qualifier = qualifier("progress")) { progressChannel }
+                single { db }
             }
         )
     }
+
+    val runId = db.addRun(projects.map { it.identifier })
 
     val job = launch {
         val testProgress: List<ProjectProgress> = projects.map {
@@ -49,7 +54,7 @@ fun main(args: Array<String>) = runBlocking {
 
         progressChannel.send(testProgress)
 
-        KFlakyTestExecutor(projects[1], testProgress).also {
+        KFlakyTestExecutor(projects[1], testProgress, runId).also {
             it.runProject()
         }
 

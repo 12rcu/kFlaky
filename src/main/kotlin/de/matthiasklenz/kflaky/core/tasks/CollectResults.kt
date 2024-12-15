@@ -7,6 +7,7 @@ interface CollectResults {
 }
 
 data class TestResultData(
+    val testSuite: String,
     val testName: String,
     val outcome: TestOutcome
 )

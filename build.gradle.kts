@@ -29,6 +29,10 @@ dependencies {
     // https://mvnrepository.com/artifact/io.insert-koin/koin-core-coroutines
     implementation("io.insert-koin:koin-core-coroutines:4.1.0-Beta1")
     
+    //sql
+    implementation("org.ktorm:ktorm-core:4.1.1")
+    implementation("org.ktorm:ktorm-support-sqlite:4.1.1")
+    implementation("org.xerial:sqlite-jdbc:3.47.1.0")
 }
 
 tasks.test {
@@ -45,7 +49,7 @@ tasks.withType<Jar> {
     // To avoid the duplicate handling strategy error
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    // To add all of the dependencies
+    // To add all the dependencies
     from(sourceSets.main.get().output)
 
     dependsOn(configurations.runtimeClasspath)

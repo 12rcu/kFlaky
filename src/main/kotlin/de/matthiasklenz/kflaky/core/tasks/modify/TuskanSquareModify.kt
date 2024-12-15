@@ -2,19 +2,26 @@ package de.matthiasklenz.kflaky.core.tasks.modify
 
 import de.matthiasklenz.kflaky.core.plattform.Plattform
 import de.matthiasklenz.kflaky.core.project.TestFramworkConfig
+import de.matthiasklenz.kflaky.core.strategy.tuscansq.TuscanCalculation
 import de.matthiasklenz.kflaky.core.strategy.tuscansq.TuscanGenerator
 
-fun tuskanSquareModify(config: TestFramworkConfig, testFileContent: String): List<String> {
+fun tuskanSquareOrderGenerate(config: TestFramworkConfig, testFileContent: String): TuscanCalculation {
     val tests = config.testAnnotation.findAll(testFileContent)
     val testCount = tests.count()
 
     if (testCount == 1) {
-        return listOf(testFileContent)
+        return TuscanCalculation(
+            1,
+            listOf(listOf(1))
+        )
     }
 
     val generator = TuscanGenerator()
     val runOrders = generator.generate(testCount)
+    return runOrders
+}
 
+fun tuskanSquareModify(runOrders: TuscanCalculation, testFileContent: String, config: TestFramworkConfig): List<String> {
     return runOrders.matrix.map {
         testFileContent
             .applyOrderAddnotationClass(config)
