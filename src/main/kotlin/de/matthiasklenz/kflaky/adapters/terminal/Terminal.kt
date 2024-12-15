@@ -11,13 +11,18 @@ import org.fusesource.jansi.AnsiConsole
 import org.jline.terminal.TerminalBuilder
 
 object Appearance {
-    const val BG = 0x662F4D
-    const val SECONDARY = 0xAE445A
-    const val PRIMARY = 0xF39F5A
+    const val BG = 0x707880
+    const val SECONDARY = 0xb294bb
+    const val PROGRESS = 0x5e8d87
+    const val PRIMARY = 0xf0c674
+
+    const val SUCCESS = 0xb5bd68
+    const val ERR = 0xcc6666
+    const val INFO = 0x81a2be
 }
 
 suspend fun createTerminal() = coroutineScope {
-    val terminal = TerminalBuilder.terminal()
+    val terminal = TerminalBuilder.builder().system(true).build()
     val width = terminal.width
     val height = terminal.height
 

@@ -17,6 +17,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 import java.nio.file.Paths
+import java.util.concurrent.ConcurrentLinkedDeque
 
 fun main(args: Array<String>) = runBlocking {
     val config = handleCommandLineArgs(args)
@@ -37,7 +38,7 @@ fun main(args: Array<String>) = runBlocking {
     }
 
     val job = launch {
-        val testProgress = projects.map {
+        val testProgress: List<ProjectProgress> = projects.map {
             ProjectProgress(
                 it.identifier,
                 ProjectState.NOT_STARTED,

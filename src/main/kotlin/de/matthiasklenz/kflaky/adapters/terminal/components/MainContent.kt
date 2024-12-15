@@ -54,7 +54,7 @@ fun printMainConent(projects: List<ProjectProgress>, debug: List<String>, width:
                 .a(projectName)
                 .fgRgb(Appearance.BG)
                 .a("║")
-                .fgRgb(Appearance.SECONDARY)
+                .fgRgb(Appearance.PROGRESS)
                 .a(progress)
                 .fgRgb(Appearance.BG)
                 .a("║")
@@ -68,11 +68,11 @@ fun printMainConent(projects: List<ProjectProgress>, debug: List<String>, width:
 
 private fun ProjectState.getColor(): Int {
     return when (this.name) {
-        "SETUP" -> 0xC2C2C2
-        "RUNNING" -> 0x4C83DF
-        "EVAL" -> 0x75BAB6
-        "CLEANUP" -> 0x4BBC85
-        "DONE" -> 0x4BBC85
-        else -> 0xC2C2C2
+        "SETUP" -> Appearance.SECONDARY
+        "RUNNING" -> Appearance.INFO
+        "EVAL" -> Appearance.ERR
+        "CLEANUP" -> Appearance.ERR
+        "DONE" -> Appearance.SUCCESS
+        else ->  Appearance.SECONDARY
     }
 }
