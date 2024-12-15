@@ -25,6 +25,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     implementation("org.fusesource.jansi:jansi:2.4.1")
     implementation("org.jline:jline:3.26.3")
+
+    // https://mvnrepository.com/artifact/io.insert-koin/koin-core-coroutines
+    implementation("io.insert-koin:koin-core-coroutines:4.1.0-Beta1")
+    
 }
 
 tasks.test {

@@ -1,18 +1,16 @@
 package de.matthiasklenz.kflaky.adapters.terminal.components
 
-import de.matthiasklenz.kflaky.adapters.terminal.Apperance
+import de.matthiasklenz.kflaky.adapters.terminal.Appearance
 import de.matthiasklenz.kflaky.adapters.terminal.centerSring
 import de.matthiasklenz.kflaky.adapters.terminal.containLength
 import org.fusesource.jansi.Ansi.ansi
 
 fun printHeader(width: Int, projectDevision: Int, testDevision: Int) {
-
-
     val kFlaky = StringBuilder()
     for (i in 0 until width) kFlaky.append(" ")
     val start = width / 2 - 3
     kFlaky.replace(start, start + 6, "kFlaky")
-    println(ansi().fgRgb(Apperance.PRIMARY).bold().a(kFlaky.toString()).reset())
+    println(ansi().fgRgb(Appearance.PRIMARY).bold().a(kFlaky.toString()).reset())
 
     val top = StringBuilder()
     for (i in 0 until width) top.append("═")
@@ -20,28 +18,28 @@ fun printHeader(width: Int, projectDevision: Int, testDevision: Int) {
     top.replace(width - 1, width, "╗")
     top.replace(projectDevision, projectDevision + 1, "╦")
     top.replace(testDevision, testDevision + 1, "╦")
-    println(ansi().fgRgb(Apperance.BG).a(top.toString()).reset())
+    println(ansi().fgRgb(Appearance.BG).a(top.toString()).reset())
 
     val projects = centerSring("Projects:", projectDevision - 1, ' ')
-    val tests = centerSring("Tests:",  testDevision - projectDevision - 1, ' ')
+    val tests = centerSring("Progress:",  testDevision - projectDevision - 1, ' ')
     val progressSpace = width - testDevision - 2
-    val progressContent = containLength("Progress:", progressSpace) //make sure the name fits!
+    val progressContent = containLength("Log:", progressSpace) //make sure the name fits!
     val progress = centerSring(content = progressContent, progressSpace, ' ')
     println(
         ansi()
-            .fgRgb(Apperance.BG)
+            .fgRgb(Appearance.BG)
             .a("║")
-            .fgRgb(Apperance.SECONDARY)
+            .fgRgb(Appearance.SECONDARY)
             .a(projects)
-            .fgRgb(Apperance.BG)
+            .fgRgb(Appearance.BG)
             .a("║")
-            .fgRgb(Apperance.SECONDARY)
+            .fgRgb(Appearance.SECONDARY)
             .a(tests)
-            .fgRgb(Apperance.BG)
+            .fgRgb(Appearance.BG)
             .a("║")
-            .fgRgb(Apperance.SECONDARY)
+            .fgRgb(Appearance.SECONDARY)
             .a(progress)
-            .fgRgb(Apperance.BG)
+            .fgRgb(Appearance.BG)
             .a("║")
     )
 
@@ -51,6 +49,6 @@ fun printHeader(width: Int, projectDevision: Int, testDevision: Int) {
     bottom.replace(width - 1, width, "╢")
     bottom.replace(projectDevision, projectDevision + 1, "╫")
     bottom.replace(testDevision, testDevision + 1, "╫")
-    println(ansi().fgRgb(Apperance.BG).a(bottom.toString()).reset())
+    println(ansi().fgRgb(Appearance.BG).a(bottom.toString()).reset())
 
 }

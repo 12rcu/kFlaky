@@ -1,6 +1,6 @@
 package de.matthiasklenz.kflaky.adapters.terminal
 
-import java.lang.StringBuilder
+import kotlin.text.StringBuilder
 
 fun containLength(content: String, maxLength: Int): String {
     if (content.length <= maxLength)
@@ -27,4 +27,15 @@ fun centerSring(content: String, within: Int, spcaeCharacter: Char = ' '): Strin
 fun centerAndContain(content: String, within: Int, spcaeCharacter: Char = ' '): String {
     val contained = containLength(content, within)
     return centerSring(contained, within, spcaeCharacter)
+}
+
+fun appendWhitespaceToString(content: String, size: Int): String {
+    if(content.length >= size) {
+        return content
+    }
+    val builder = StringBuilder(content)
+    for (i in content.length until  size) {
+        builder.append(" ")
+    }
+    return builder.toString()
 }

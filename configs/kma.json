@@ -1,0 +1,10 @@
+{
+  "identifier": "kma",
+  "framework": "junit",
+  "language": "kotlin",
+  "testExecutionCommand": "gradelw test",
+  "testExecutionDir": "/home/matthias/Documents/opensource/KeepMeAlive3D/KeepMeAlive3D/backend",
+  "testDir": "/home/matthias/Documents/opensource/KeepMeAlive3D/KeepMeAlive3D/backend/api/src/test/kotlin",
+  "testResultDir": "/home/matthias/Documents/opensource/KeepMeAlive3D/KeepMeAlive3D/backend/abi/build/test-results",
+  "strategy": "TUSCAN_SQUARES"
+}

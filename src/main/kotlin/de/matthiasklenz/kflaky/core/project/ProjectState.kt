@@ -1,12 +1,10 @@
 package de.matthiasklenz.kflaky.core.project
 
-/**
- * @param testProgress indicates the current tests progression of each test suite and how often they need to be reran
- */
 data class ProjectProgress(
     val name: String,
-    val state: ProjectState,
-    val testProgress: List<TestProgress>
+    var state: ProjectState,
+    var testsToRun: Int,
+    var index: Int
 )
 
 enum class ProjectState {

@@ -1,4 +1,5 @@
 {
+    "identifier": "kFlaky",
     "framework": "junit",
     "language": "kotlin",
     "testExecutionCommand": "./gradlew test",

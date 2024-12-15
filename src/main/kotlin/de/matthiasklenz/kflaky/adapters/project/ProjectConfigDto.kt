@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProjectConfigDto(
+    val identifier: String,
     val framework: String,
     val language: String,
     val testExecutionCommand: String,

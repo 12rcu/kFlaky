@@ -21,6 +21,7 @@ fun ProjectConfigDto.map(): ProjectConfig {
     }
 
     return ProjectConfig(
+        identifier,
         frameworkConfig,
         Paths.get(this.testResultDir),
         Paths.get(this.testDir),
