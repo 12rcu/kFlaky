@@ -6,5 +6,6 @@
     "testExecutionDir": "/home/matthias/Documents/opensource/kFlaky",
     "testDir": "/home/matthias/Documents/opensource/kFlaky/src/test/kotlin",
     "testResultDir": "/home/matthias/Documents/opensource/kFlaky/build/test-results",
-    "strategy": "TUSCAN_SQUARES"
+    "strategy": "TUSCAN_SQUARES",
+    "preRuns": 10
 }

@@ -61,7 +61,7 @@ class KFlakyTestExecutor(
     }
 
     private suspend fun runTestOrders() {
-        progress.forEach { it.state = ProjectState.RUNNING }
+        progress.forEach { it.state = ProjectState.OD_RUNS }
         progressChannel.send(projectProgress)
 
         val runs = orders.maxOf { it.generatedOrders.size }
@@ -98,7 +98,8 @@ class KFlakyTestExecutor(
                 runId,
                 result,
                 projectConfig.identifier,
-                order.orders.matrix.getOrNull(index) ?: listOf()
+                order.orders.matrix.getOrNull(index) ?: listOf(),
+                state = ProjectState.OD_RUNS
             )
         }
     }

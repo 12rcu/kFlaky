@@ -5,10 +5,10 @@ import de.matthiasklenz.kflaky.adapters.mapper.map
 import de.matthiasklenz.kflaky.adapters.persistence.SqlLiteDB
 import de.matthiasklenz.kflaky.adapters.project.ProjectConfigDto
 import de.matthiasklenz.kflaky.adapters.terminal.createTerminal
+import de.matthiasklenz.kflaky.core.execution.KFlakyPreRunExecutor
 import de.matthiasklenz.kflaky.core.execution.KFlakyTestExecutor
 import de.matthiasklenz.kflaky.core.project.ProjectProgress
 import de.matthiasklenz.kflaky.core.project.ProjectState
-import de.matthiasklenz.kflaky.core.project.TestProgress
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
@@ -18,7 +18,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 import java.nio.file.Paths
-import java.util.concurrent.ConcurrentLinkedDeque
 
 fun main(args: Array<String>) = runBlocking {
     val config = handleCommandLineArgs(args)
@@ -54,8 +53,10 @@ fun main(args: Array<String>) = runBlocking {
 
         progressChannel.send(testProgress)
 
-        KFlakyTestExecutor(projects[1], testProgress, runId).also {
-            it.runProject()
+        projects.forEach {
+            KFlakyPreRunExecutor(it, testProgress, runId).executePreRuns()
+            //todo use results form pre runs to disable tests!
+            KFlakyTestExecutor(it, testProgress, runId).runProject()
         }
 
         logChannel.close()
@@ -68,5 +69,6 @@ fun main(args: Array<String>) = runBlocking {
 
     job.join()
     terminal.await()    //wait for UI exit
+
     return@runBlocking
 }

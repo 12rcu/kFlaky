@@ -7,6 +7,7 @@ CREATE TABLE runs (
 CREATE TABLE test_results (
     id INTEGER PRIMARY KEY,
     run_id INTEGER,
+    run_type TEXT,
     project TEXT,
     test_suite TEXT,
     test_id TEXT,

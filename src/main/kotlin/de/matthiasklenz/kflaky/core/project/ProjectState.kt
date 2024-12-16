@@ -8,9 +8,10 @@ data class ProjectProgress(
 )
 
 enum class ProjectState {
+    PRE_RUNS,
     NOT_STARTED,
     SETUP,
-    RUNNING,
+    OD_RUNS,
     EVAL,
     CLEANUP,
     DONE;

@@ -12,5 +12,6 @@ data class ProjectConfigDto(
     val testExecutionDir: String,
     val testDir: String,
     val testResultDir: String,
-    val strategy: TestExecutionStrategy
+    val strategy: TestExecutionStrategy,
+    val preRuns: Int
 )

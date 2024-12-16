@@ -28,6 +28,7 @@ fun ProjectConfigDto.map(): ProjectConfig {
         this.strategy,
         this.testExecutionCommand,
         Paths.get(this.testExecutionDir),
-        collector
+        collector,
+        preRuns
     )
 }
