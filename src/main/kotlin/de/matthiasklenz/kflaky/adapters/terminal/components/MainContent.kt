@@ -41,7 +41,7 @@ fun printMainConent(projects: List<ProjectProgress>, debug: List<String>, width:
         }
 
         val log = debug.getOrNull(debug.size - bodyHeight + i) ?: ""
-        val logStrContained = containLength(log ?: "", width - progressDevision - 2)
+        val logStrContained = containLength(log ?: "", width - progressDevision - 3)
         val logStrSized = appendWhitespaceToString(logStrContained, width - progressDevision - 3)
         val logOut = StringBuilder(" ")
         logOut.append(logStrSized)
@@ -69,6 +69,7 @@ fun printMainConent(projects: List<ProjectProgress>, debug: List<String>, width:
 private fun ProjectState.getColor(): Int {
     return when (this.name) {
         "SETUP" -> Appearance.SECONDARY
+        "PRE_RUNS" -> Appearance.INFO
         "RUNNING" -> Appearance.INFO
         "EVAL" -> Appearance.ERR
         "CLEANUP" -> Appearance.ERR
