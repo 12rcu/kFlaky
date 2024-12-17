@@ -12,7 +12,7 @@ enum class ProjectState {
     NOT_STARTED,
     SETUP,
     OD_RUNS,
-    EVAL,
+    CLASSIFICATION,
     CLEANUP,
     DONE;
 

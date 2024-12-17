@@ -5,6 +5,7 @@ import de.matthiasklenz.kflaky.adapters.mapper.map
 import de.matthiasklenz.kflaky.adapters.persistence.SqlLiteDB
 import de.matthiasklenz.kflaky.adapters.project.ProjectConfigDto
 import de.matthiasklenz.kflaky.adapters.terminal.createTerminal
+import de.matthiasklenz.kflaky.core.detection.KFlakyClassifier
 import de.matthiasklenz.kflaky.core.execution.KFlakyPreRunExecutor
 import de.matthiasklenz.kflaky.core.execution.KFlakyTestExecutor
 import de.matthiasklenz.kflaky.core.project.ProjectProgress
@@ -57,6 +58,7 @@ fun main(args: Array<String>) = runBlocking {
             KFlakyPreRunExecutor(it, testProgress, runId).executePreRuns()
             //todo use results form pre runs to disable tests!
             KFlakyTestExecutor(it, testProgress, runId).runProject()
+            KFlakyClassifier(runId, it, testProgress).classify()
         }
 
         logChannel.close()
