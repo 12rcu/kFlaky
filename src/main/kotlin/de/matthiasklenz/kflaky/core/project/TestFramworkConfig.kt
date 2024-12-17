@@ -9,7 +9,11 @@ interface TestFramworkConfig {
     val lanaguage: Language
     val testAnnotation: Regex
 
-    val imports: MutableSet<String>
+    fun testSuiteStart(): Regex
+
+    fun importStart(): Regex
+
+    fun imports(): Set<String>
 
     /**
      * the ignore annotation
@@ -25,4 +29,9 @@ interface TestFramworkConfig {
      * the annotation the test class gets when executing by order
      */
     fun classOrderAnnontaion(): String
+
+    /**
+     * identifies if a testsuite identifier matches a given test
+     */
+    fun isTestContentForTestSuite(testFileContent: String, testSuite: String, test: String): Boolean
 }

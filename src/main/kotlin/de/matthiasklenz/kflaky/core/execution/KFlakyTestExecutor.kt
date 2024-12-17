@@ -93,14 +93,25 @@ class KFlakyTestExecutor(
 
     private fun evaluate(index: Int) {
         projectConfig.testResultCollector.collect(projectConfig.testResultDir).forEach { result ->
-            val order = orders.first { it.content.contains(result.testSuite) && it.content.contains(result.testName) }
-            sqlLiteDB.addTestResult(
-                runId,
-                result,
-                projectConfig.identifier,
-                order.orders.matrix.getOrNull(index) ?: listOf(),
-                state = ProjectState.OD_RUNS
-            )
+            val order = orders.firstOrNull {
+                projectConfig.framworkConfig.isTestContentForTestSuite(
+                    it.content,
+                    result.testSuite,
+                    result.testName
+                )
+            }
+            if (order != null) {
+                sqlLiteDB.addTestResult(
+                    runId,
+                    result,
+                    projectConfig.identifier,
+                    order.orders.matrix.getOrNull(index) ?: listOf(),
+                    state = ProjectState.OD_RUNS
+                )
+            } else {
+                //should not happen, for development you can throw an Exception
+                //throw Exception()
+            }
         }
     }
 

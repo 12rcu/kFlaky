@@ -2,6 +2,7 @@ package de.matthiasklenz.kflaky
 
 import de.matthiasklenz.kflaky.adapters.commandline.handleCommandLineArgs
 import de.matthiasklenz.kflaky.adapters.mapper.map
+import de.matthiasklenz.kflaky.adapters.persistence.KFlakyLogger
 import de.matthiasklenz.kflaky.adapters.persistence.SqlLiteDB
 import de.matthiasklenz.kflaky.adapters.project.ProjectConfigDto
 import de.matthiasklenz.kflaky.adapters.terminal.createTerminal
@@ -18,6 +19,7 @@ import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
+import java.io.File
 import java.nio.file.Paths
 
 fun main(args: Array<String>) = runBlocking {
@@ -41,6 +43,12 @@ fun main(args: Array<String>) = runBlocking {
     }
 
     val runId = db.addRun(projects.map { it.identifier })
+    File("logs").mkdir()
+    val logger = KFlakyLogger(File("logs/log-$runId.txt"))
+
+    launch {
+        logger.startWriting()
+    }
 
     val job = launch {
         val testProgress: List<ProjectProgress> = projects.map {
@@ -55,6 +63,7 @@ fun main(args: Array<String>) = runBlocking {
         progressChannel.send(testProgress)
 
         projects.forEach {
+            logger.setProject(it.identifier)
             KFlakyPreRunExecutor(it, testProgress, runId).executePreRuns()
             //todo use results form pre runs to disable tests!
             KFlakyTestExecutor(it, testProgress, runId).runProject()

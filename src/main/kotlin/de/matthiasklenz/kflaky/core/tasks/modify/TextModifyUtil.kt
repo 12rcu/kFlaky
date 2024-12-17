@@ -9,8 +9,7 @@ object TextModifyUtil {
             if(replaced)
                 return@replace it.value
             val text = it.value
-            val prefix = content.substring(0, it.range.first).split(Plattform.lineSeperator).last() //get the whitespace or acess modifier before the class
-            val result = "${insertText}${Plattform.lineSeperator}${prefix}${text}"
+            val result = "${insertText}${Plattform.lineSeperator}${text}"
             replaced = true
             return@replace result
         }
@@ -27,8 +26,7 @@ object TextModifyUtil {
         }
     }
 
-    fun addImports(content: String, insertText: String): String {
-        val regex = Regex("package")
+    fun addImports(content: String, insertText: String, regex: Regex): String {
         if(regex.find(content) == null) {
             return insertText + Plattform.lineSeperator + content
         }
@@ -36,8 +34,7 @@ object TextModifyUtil {
         return regex.replace(content) {
             if(replaced)
                 return@replace it.value
-            val suffix = content.substring(it.range.last, content.length).split(Plattform.lineSeperator).first() //get the packagename aswell
-            val result = "${it.value}${suffix}${Plattform.lineSeperator}${insertText}${Plattform.lineSeperator}"
+            val result = "${it.value}${Plattform.lineSeperator}${insertText}${Plattform.lineSeperator}"
             replaced = true
             result
         }

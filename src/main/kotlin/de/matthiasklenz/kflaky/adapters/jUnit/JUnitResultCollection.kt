@@ -12,8 +12,9 @@ class JUnitResultCollection : CollectResults {
         val results = resultsPath
             .toFile()
             .walk()
-            .filter { it.isFile && it.name.endsWith(".xml") }
-            .map { mapper.readValue(it.readText(), TestSuite::class.java) }
+            .filter { it.isFile && it.name.startsWith("TEST-") && it.name.endsWith(".xml") }
+            .map { try { mapper.readValue(it.readText(), TestSuite::class.java) } catch (e: Exception) { null } }
+            .filterNotNull()
         val res = results.map { testSuite ->
             testSuite.testcase?.map { case ->
                 val outcome = if(case.failure == null) TestOutcome.PASSED else TestOutcome.FAILED

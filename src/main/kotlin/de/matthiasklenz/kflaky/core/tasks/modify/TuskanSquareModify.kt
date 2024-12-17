@@ -31,11 +31,11 @@ fun tuskanSquareModify(runOrders: TuscanCalculation, testFileContent: String, co
 }
 
 private fun String.applyImports(config: TestFramworkConfig): String {
-    return TextModifyUtil.addImports(this, config.imports.joinToString(Plattform.lineSeperator))
+    return TextModifyUtil.addImports(this, config.imports().joinToString(Plattform.lineSeperator), config.importStart())
 }
 
 private fun String.applyOrderAddnotationClass(config: TestFramworkConfig): String {
-    return TextModifyUtil.addFirstAnnotationBefore(this, Regex("class"), config.classOrderAnnontaion())
+    return TextModifyUtil.addFirstAnnotationBefore(this, config.testSuiteStart(), config.classOrderAnnontaion())
 }
 
 private fun String.applyTestOrder(order: List<Int>, config: TestFramworkConfig): String {
