@@ -6,6 +6,7 @@ import de.matthiasklenz.kflaky.adapters.terminal.centerAndContain
 import de.matthiasklenz.kflaky.adapters.terminal.containLength
 import de.matthiasklenz.kflaky.core.project.ProjectProgress
 import de.matthiasklenz.kflaky.core.project.ProjectState
+import de.matthiasklenz.kflaky.core.project.getShort
 import org.fusesource.jansi.Ansi.ansi
 import kotlin.math.roundToInt
 
@@ -17,7 +18,7 @@ import kotlin.math.roundToInt
 fun printMainConent(projects: List<ProjectProgress>, debug: List<String>, width: Int, bodyHeight: Int, projectDevision: Int, progressDevision: Int) {
     for (i in 0 until bodyHeight) {
         val project = projects.getOrNull(i)
-        val projectNameState = project?.name?.plus(" (${project.state})")
+        val projectNameState = if(project != null) ("[${project.state.getShort()}]" + project.name) else ""
         val projectName = centerAndContain(projectNameState ?: "", projectDevision - 1, ' ')
 
         val testProgessSpace = progressDevision - projectDevision - 2
@@ -54,7 +55,7 @@ fun printMainConent(projects: List<ProjectProgress>, debug: List<String>, width:
                 .a(projectName)
                 .fgRgb(Appearance.BG)
                 .a("║")
-                .fgRgb(Appearance.PROGRESS)
+                .fgRgb(project?.state?.getColor() ?: Appearance.PROGRESS)
                 .a(progress)
                 .fgRgb(Appearance.BG)
                 .a("║")
@@ -67,13 +68,13 @@ fun printMainConent(projects: List<ProjectProgress>, debug: List<String>, width:
 }
 
 private fun ProjectState.getColor(): Int {
-    return when (this.name) {
-        "SETUP" -> Appearance.SECONDARY
-        "PRE_RUNS" -> Appearance.INFO
-        "RUNNING" -> Appearance.INFO
-        "EVAL" -> Appearance.ERR
-        "CLEANUP" -> Appearance.ERR
-        "DONE" -> Appearance.SUCCESS
+    return when (this) {
+        ProjectState.SETUP -> 0x5C2FC2
+        ProjectState.PRE_RUNS -> 0x5C88C4
+        ProjectState.OD_RUNS -> 0x6FDCE3
+        ProjectState.CLASSIFICATION -> 0xFFFDB5
+        ProjectState.CLEANUP -> 0xa8b056
+        ProjectState.DONE -> 0xa8b056
         else ->  Appearance.SECONDARY
     }
 }

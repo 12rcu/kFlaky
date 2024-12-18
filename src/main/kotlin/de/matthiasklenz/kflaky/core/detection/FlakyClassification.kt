@@ -49,7 +49,7 @@ class KFlakyClassifier(
             it.index = 0
         }
 
-        progressChannel.send(progress)
+        progressChannel.send(projectProgress)
 
         detection.forEach { (id, classification) ->
             sqlLiteDB.addClassification(
@@ -62,11 +62,11 @@ class KFlakyClassifier(
             progress.forEach {
                 it.index++
             }
-            progressChannel.send(progress)
+            progressChannel.send(projectProgress)
         }
         progress.forEach {
             it.index = it.testsToRun
         }
-        progressChannel.send(progress)
+        progressChannel.send(projectProgress)
     }
 }

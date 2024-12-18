@@ -68,6 +68,9 @@ fun main(args: Array<String>) = runBlocking {
             //todo use results form pre runs to disable tests!
             KFlakyTestExecutor(it, testProgress, runId).runProject()
             KFlakyClassifier(runId, it, testProgress).classify()
+
+            testProgress.filter { progress -> progress.name == it.identifier }.forEach { progress -> progress.state = ProjectState.DONE }
+            progressChannel.send(testProgress)
         }
 
         logChannel.close()

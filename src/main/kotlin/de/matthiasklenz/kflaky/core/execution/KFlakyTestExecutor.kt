@@ -36,11 +36,10 @@ class KFlakyTestExecutor(
         println(progress.map { it.name })
 
         setup()
-        runTestOrders()
-        cleanup()
-
-        progress.forEach { it.state = ProjectState.DONE }
-        progressChannel.send(projectProgress)
+        if(orders.isNotEmpty()) {
+            runTestOrders()
+            cleanup()
+        }
     }
 
     private fun setup() {
@@ -56,6 +55,9 @@ class KFlakyTestExecutor(
             }.toList()
 
             else -> listOf()
+        }
+        if(orders.isEmpty()) {
+            return
         }
         progress.forEach { it.testsToRun = orders.maxOf { o -> o.generatedOrders.size } }
     }

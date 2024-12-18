@@ -1,0 +1,11 @@
+{
+    "identifier": "spingRestUtils",
+    "framework": "junit",
+    "language": "java",
+    "testExecutionCommand": "./gradlew test",
+    "testExecutionDir": "/home/matthias/Documents/opensource/flakyProjects/spring-data-rest-utils",
+    "testDir": "/home/matthias/Documents/opensource/flakyProjects/spring-data-rest-utils/src/test",
+    "testResultDir": "/home/matthias/Documents/opensource/flakyProjects/spring-data-rest-utils/build/test-results",
+    "strategy": "TUSCAN_SQUARES",
+    "preRuns": 10
+}
