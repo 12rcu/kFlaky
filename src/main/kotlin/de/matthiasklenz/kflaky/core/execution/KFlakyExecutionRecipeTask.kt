@@ -77,7 +77,7 @@ class KFlakyExecutionRecipeTask(
         testCommand.executeTestCommand(projectConfig.testCommand, execPath.toFile(), "worker-$worker")
     }
 
-    private fun eval(worker: Int, projectConfig: ProjectConfig) {
+    private suspend fun eval(worker: Int, projectConfig: ProjectConfig) {
         projectConfig.testResultCollector.collect(getTestResultsPath(worker, projectConfig)).forEach { result ->
             sqlLiteDB.addTestResult(
                 runId,

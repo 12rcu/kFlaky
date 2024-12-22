@@ -69,7 +69,7 @@ class KFlakyOdTestExecutor(
 
     private suspend fun runTestOrders() {
         for (i in 0 until testRuns) {
-            terminalLog.send("[${projectConfig.identifier}] Sceduled OD test execution ${i + 1}/$testRuns")
+            terminalLog.send("[${projectConfig.identifier}] Scheduled OD test execution ${i + 1}/$testRuns")
             val task = KFlakyExecutionRecipeTask(
                 projectConfig.identifier,
                 projectProgress,

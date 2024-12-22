@@ -14,5 +14,6 @@ class ProjectConfig (
     val strategy: TestExecutionStrategy,
     val testCommand: String,
     val testResultCollector: CollectResults,
-    val preRuns: Int
+    val preRuns: Int,
+    val enabled: Boolean
 )

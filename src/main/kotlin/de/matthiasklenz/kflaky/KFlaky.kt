@@ -22,7 +22,7 @@ import kotlin.io.path.Path
 fun main() = runBlocking {
     val config = Path("config.json").toFile().readText()
     val kFlakyConfig = Json.decodeFromString<KFlakyConfigDto>(config).map()
-    val projects = kFlakyConfig.projects
+    val projects = kFlakyConfig.projects.filter { it.enabled }
 
     val logChannel = Channel<String>()
     val terminalLogChannel = Channel<String>()

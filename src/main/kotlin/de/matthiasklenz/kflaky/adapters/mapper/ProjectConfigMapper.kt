@@ -32,6 +32,7 @@ fun ProjectConfigDto.map(): ProjectConfig {
         this.strategy,
         this.testExecutionCommand,
         collector,
-        preRuns
+        preRuns,
+        enabled
     )
 }
