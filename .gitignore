@@ -28,3 +28,8 @@ build
 .gradle/
 .kotlin
 logs/
+
+remote.db
+tmp.txt
+remote/
+.gradle/
