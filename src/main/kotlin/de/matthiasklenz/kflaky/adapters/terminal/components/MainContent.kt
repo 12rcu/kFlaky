@@ -22,7 +22,7 @@ fun printMainConent(projects: List<ProjectProgress>, debug: List<String>, width:
         val projectName = centerAndContain(projectNameState ?: "", projectDevision - 1, ' ')
 
         val testProgessSpace = progressDevision - projectDevision - 2
-        val testProgressFraction = if(project != null && project.testsToRun != 0) project.index / project.testsToRun.toFloat() else null
+        val testProgressFraction = if(project != null && project.testsToRun != 0) project.index.get() / project.testsToRun.toFloat() else null
         val testProgressCutoff = if(testProgressFraction != null) (testProgressFraction * testProgessSpace).toInt() else null
 
         val progress = StringBuilder(" ")

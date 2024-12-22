@@ -1,6 +1,6 @@
 package de.matthiasklenz.kflaky.core.tasks.modify
 
-import de.matthiasklenz.kflaky.core.plattform.Plattform
+import de.matthiasklenz.kflaky.adapters.plattform.Plattform
 import de.matthiasklenz.kflaky.core.project.TestFramworkConfig
 import de.matthiasklenz.kflaky.core.strategy.tuscansq.TuscanCalculation
 import de.matthiasklenz.kflaky.core.strategy.tuscansq.TuscanGenerator

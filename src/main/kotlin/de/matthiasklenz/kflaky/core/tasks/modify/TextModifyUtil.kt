@@ -1,6 +1,6 @@
 package de.matthiasklenz.kflaky.core.tasks.modify
 
-import de.matthiasklenz.kflaky.core.plattform.Plattform
+import de.matthiasklenz.kflaky.adapters.plattform.Plattform
 
 object TextModifyUtil {
     fun addFirstAnnotationBefore(content: String, regex: Regex, insertText: String): String {

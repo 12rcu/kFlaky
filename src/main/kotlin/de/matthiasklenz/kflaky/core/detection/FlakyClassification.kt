@@ -16,6 +16,7 @@ import org.ktorm.dsl.insert
 import org.ktorm.entity.filter
 import org.ktorm.entity.map
 import org.ktorm.entity.sequenceOf
+import java.util.concurrent.atomic.AtomicInteger
 
 enum class FlakyClassification {
     NON_FLAKY,
@@ -30,25 +31,20 @@ data class FlakyClassificationData(
 )
 
 class KFlakyClassifier(
-    private val runId: Int,
     private val projectConfig: ProjectConfig,
-    private val projectProgress: List<ProjectProgress>,
+    private val projectProgress: ProjectProgress,
+    private val runId: Int,
 ) : KoinComponent {
-    private val progressChannel: Channel<List<ProjectProgress>> by inject(qualifier("progress"))
+    private val progressChannel: Channel<ProjectProgress> by inject(qualifier("progress"))
     private val sqlLiteDB: SqlLiteDB by inject()
-
-    private val progress = projectProgress.filter { it.name == projectConfig.identifier }
 
     suspend fun classify() {
         val testResults = sqlLiteDB.getTestResults(runId, projectConfig.identifier)
         val detection = FlakyDetection().flakyDetection(testResults)
 
-        progress.forEach {
-            it.state = ProjectState.CLASSIFICATION
-            it.testsToRun = detection.size
-            it.index = 0
-        }
-
+        projectProgress.state = ProjectState.CLASSIFICATION
+        projectProgress.index.set(0)
+        projectProgress.testsToRun = detection.size
         progressChannel.send(projectProgress)
 
         detection.forEach { (id, classification) ->
@@ -59,14 +55,8 @@ class KFlakyClassifier(
                 testId = id.second,
                 classification
             )
-            progress.forEach {
-                it.index++
-            }
+            projectProgress.index.addAndGet(1)
             progressChannel.send(projectProgress)
         }
-        progress.forEach {
-            it.index = it.testsToRun
-        }
-        progressChannel.send(projectProgress)
     }
 }

@@ -13,29 +13,37 @@ import org.fusesource.jansi.Ansi.ansi
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.qualifier
+import org.ktorm.dsl.exists
 
 class ProjectRender : KoinComponent {
-    private val logChannel: Channel<String> by inject(qualifier = qualifier("log"))
-    private val progressChannel: Channel<List<ProjectProgress>> by inject(qualifier("progress"))
+
+    private val terminalLog: Channel<String> by inject(qualifier("terminal"))
+    private val progressChannel: Channel<ProjectProgress> by inject(qualifier("progress"))
+    var projectsProgress: MutableList<ProjectProgress> = mutableListOf()
 
     suspend fun projectRender(size: Pair<Int, Int>): Deferred<Unit> =
         coroutineScope {
             render(size, listOf(), listOf())
-
-            var projects: List<ProjectProgress> = listOf()
             val log: MutableList<String> = mutableListOf()
 
             return@coroutineScope async {
                 val progressJob = launch {
                     for (p in progressChannel) {
-                        projects = p
-                        render(size, p, log)
+                        val existing = projectsProgress.firstOrNull { it.name == p.name }
+                        if (existing != null) {
+                            existing.index = p.index
+                            existing.testsToRun = p.testsToRun
+                            existing.state = p.state
+                        } else {
+                            projectsProgress.add(p)
+                        }
+                        render(size, projectsProgress, log)
                     }
                 }
                 val logJob = launch {
-                    for (l in logChannel) {
+                    for (l in terminalLog) {
                         log.add(l)
-                        render(size, projects, log)
+                        render(size, projectsProgress, log)
                     }
                 }
 

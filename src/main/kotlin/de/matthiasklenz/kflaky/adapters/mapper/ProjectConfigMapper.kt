@@ -11,23 +11,26 @@ import java.nio.file.Paths
 
 fun ProjectConfigDto.map(): ProjectConfig {
     val language = TestFramworkConfig.Language.valueOf(this.language.uppercase())
-    val frameworkConfig: TestFramworkConfig = when(this.framework.uppercase()) {
+    val frameworkConfig: TestFramworkConfig = when (this.framework.uppercase()) {
         "JUNIT" -> JUnitConfig(language)
         else -> throw NotImplementedError("This framework is currently not implemented!")
     }
-    val collector: CollectResults = when(this.framework.uppercase()) {
+    val collector: CollectResults = when (this.framework.uppercase()) {
         "JUNIT" -> JUnitResultCollection()
         else -> throw NotImplementedError("This framework is currently not implemented!")
     }
 
+    val projectPath = Paths.get(this.projectPath)
+
     return ProjectConfig(
         identifier,
         frameworkConfig,
-        Paths.get(this.testResultDir),
-        Paths.get(this.testDir),
+        projectPath,
+        testExecutionDir,
+        testResultDir,
+        testDir,
         this.strategy,
         this.testExecutionCommand,
-        Paths.get(this.testExecutionDir),
         collector,
         preRuns
     )

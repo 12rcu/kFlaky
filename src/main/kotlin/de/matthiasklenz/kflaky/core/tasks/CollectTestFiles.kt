@@ -1,13 +1,12 @@
 package de.matthiasklenz.kflaky.core.tasks
 
-import de.matthiasklenz.kflaky.core.project.ProjectConfig
 import java.io.File
-import kotlin.io.path.absolutePathString
+import java.nio.file.Path
 import kotlin.io.path.walk
 
-fun collectTestFiles(projectConfig: ProjectConfig): Sequence<TestFile> {
-    return projectConfig.testSrcDir.walk().filter {
-        it.toFile().isFile && it.toFile().readText().contains(projectConfig.framworkConfig.testAnnotation)
+fun collectTestFiles(testDir: Path, testAnnotation: Regex): Sequence<TestFile> {
+    return testDir.walk().filter {
+        it.toFile().isFile && it.toFile().readText().contains(testAnnotation)
     }.map {
         TestFile(
             content = it.toFile().readText(),

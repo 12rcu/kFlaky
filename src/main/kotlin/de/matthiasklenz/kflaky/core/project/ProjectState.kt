@@ -1,10 +1,12 @@
 package de.matthiasklenz.kflaky.core.project
 
+import java.util.concurrent.atomic.AtomicInteger
+
 data class ProjectProgress(
     val name: String,
     var state: ProjectState,
     var testsToRun: Int,
-    var index: Int
+    var index: AtomicInteger
 )
 
 enum class ProjectState {

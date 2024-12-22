@@ -1,16 +1,20 @@
 package de.matthiasklenz.kflaky.adapters.persistence
 
+import de.matthiasklenz.kflaky.KFlakyConfig
 import kotlinx.coroutines.channels.Channel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.qualifier
 import java.io.File
 
-class KFlakyLogger(private val file: File): KoinComponent {
+class KFlakyLogger(config: KFlakyConfig, runId: Int): KoinComponent {
     private val logChannel: Channel<String> by inject(qualifier("log"))
     private var project = "unknown"
 
+    private val file = config.logDir.resolve("log-$runId").toFile()
+
     init {
+        config.logDir.toFile().mkdirs()
         if(!file.exists()) {
             file.createNewFile()
         } else {
