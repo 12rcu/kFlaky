@@ -4,5 +4,6 @@ enum class TestExecutionStrategy {
     TUSCAN_SQUARES,
     RANDOM,
     REVERSE,
-    INITIAL
+    INITIAL,
+    SKIP
 }

@@ -37,6 +37,8 @@ class KFlakyOdTestExecutor(
     }
 
     suspend fun runProject() = coroutineScope {
+        if(projectConfig.strategy == TestExecutionStrategy.SKIP)
+            return@coroutineScope
         progressChannel.send(projectProgress)
         //generate orders from inital test src dir
         if (orders.isNotEmpty()) {
