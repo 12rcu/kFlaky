@@ -4,7 +4,6 @@ import de.matthiasklenz.kflaky.adapters.plattform.Plattform
 import de.matthiasklenz.kflaky.core.pool.WorkerPool
 import de.matthiasklenz.kflaky.core.project.ProjectConfig
 import de.matthiasklenz.kflaky.core.project.ProjectProgress
-import de.matthiasklenz.kflaky.core.project.ProjectState
 import de.matthiasklenz.kflaky.core.strategy.TestExecutionStrategy
 import de.matthiasklenz.kflaky.core.tasks.TestFile
 import de.matthiasklenz.kflaky.core.tasks.collectTestFiles
@@ -18,7 +17,6 @@ import org.koin.core.component.inject
 import org.koin.core.qualifier.qualifier
 import java.lang.Exception
 import java.nio.file.Path
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.io.path.absolutePathString
 
 class KFlakyOdTestExecutor(
@@ -30,7 +28,7 @@ class KFlakyOdTestExecutor(
     private val terminalLog: Channel<String> by inject(qualifier("terminal"))
     private val workerPool: WorkerPool by inject()
     private var testFiles = listOf<TestFile>()
-    private val initalTestSrcDir = if (projectConfig.testSrcDir.isNotEmpty()) {
+    private val initialTestSrcDir = if (projectConfig.testSrcDir.isNotEmpty()) {
         projectConfig.projectPath.resolve(projectConfig.testSrcDir)
     } else {
         projectConfig.projectPath
@@ -40,7 +38,7 @@ class KFlakyOdTestExecutor(
         if(projectConfig.strategy == TestExecutionStrategy.SKIP)
             return@coroutineScope
         progressChannel.send(projectProgress)
-        //generate orders from inital test src dir
+        //generate orders from initial test src dir
         if (orders.isNotEmpty()) {
             runTestOrders()
         }
@@ -55,7 +53,7 @@ class KFlakyOdTestExecutor(
      * Uses the inital project directory to generate instaed of worker copies
      */
     private val orders: List<TestOrders> by lazy {
-        testFiles = collectTestFiles(initalTestSrcDir, projectConfig.framworkConfig.testAnnotation).toList()
+        testFiles = collectTestFiles(initialTestSrcDir, projectConfig.framworkConfig.testAnnotation).toList()
         when (projectConfig.strategy) {
             TestExecutionStrategy.TUSCAN_SQUARES -> testFiles.map {
                 val runOrders = tuskanSquareOrderGenerate(projectConfig.framworkConfig, it.content)
