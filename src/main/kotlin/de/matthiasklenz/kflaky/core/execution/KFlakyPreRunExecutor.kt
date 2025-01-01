@@ -23,7 +23,7 @@ class KFlakyPreRunExecutor(
         progressChannel.send(projectProgress)
 
         for (index in 0 until projectConfig.preRuns) {
-            terminalLog.send("[${projectConfig.identifier}] Seceduled pre test execution ${index + 1}/$${projectConfig.preRuns}")
+            terminalLog.send("[${projectConfig.identifier}] Scheduled pre test execution ${index + 1}/$${projectConfig.preRuns}")
             val task = KFlakyExecutionRecipeTask(
                 projectConfig.identifier,
                 projectProgress,
