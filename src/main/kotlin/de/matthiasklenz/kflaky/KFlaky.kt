@@ -1,101 +1,30 @@
 package de.matthiasklenz.kflaky
 
-import de.matthiasklenz.kflaky.adapters.mapper.map
 import de.matthiasklenz.kflaky.adapters.persistence.KFlakyLogger
-import de.matthiasklenz.kflaky.adapters.persistence.SqlLiteDB
 import de.matthiasklenz.kflaky.adapters.terminal.createTerminal
-import de.matthiasklenz.kflaky.core.detection.KFlakyClassifier
-import de.matthiasklenz.kflaky.core.execution.KFlakyOdTestExecutor
-import de.matthiasklenz.kflaky.core.execution.KFlakyPreRunExecutor
-import de.matthiasklenz.kflaky.core.pool.WorkerPool
-import de.matthiasklenz.kflaky.core.project.ProjectProgress
-import de.matthiasklenz.kflaky.core.project.ProjectState
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.serialization.json.Json
-import org.koin.core.context.startKoin
-import org.koin.core.qualifier.qualifier
-import org.koin.dsl.module
-import java.util.concurrent.atomic.AtomicInteger
+import de.matthiasklenz.kflaky.core.configureDj
+import de.matthiasklenz.kflaky.core.run.KFlakyRun
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlin.io.path.Path
 
 fun main() = runBlocking {
-    val config = Path("config.json").toFile().readText()
-    val kFlakyConfig = Json.decodeFromString<KFlakyConfigDto>(config).map()
-    val projects = kFlakyConfig.projects.filter { it.enabled }
+    val config = loadConfig(Path("config.json"))
+    val projects = config.projects.filter { it.enabled }
 
-    val logChannel = Channel<String>()
-    val terminalLogChannel = Channel<String>()
-    val progressChannel = Channel<ProjectProgress>()
-    val db = SqlLiteDB()
-    val workerPool = WorkerPool(kFlakyConfig.worker)
+    configureDj(config, projects)
+    val kFlakyRun = KFlakyRun()
 
-    startKoin {
-        modules(
-            module {
-                single(qualifier = qualifier("log")) { logChannel }
-                single(qualifier = qualifier("terminal")) { terminalLogChannel }
-                single(qualifier = qualifier("progress")) { progressChannel }
-                single { db }
-                single { workerPool }
-                single { kFlakyConfig }
-            }
-        )
-    }
-
-    val runId = db.addRun(projects.map { it.identifier })
-    val logger = KFlakyLogger(kFlakyConfig, runId)
+    val runId = kFlakyRun.createRunEntry().await()
+    val logger = KFlakyLogger(config, runId)
 
     launch {
         logger.startWriting()
     }
 
-    val progressList = mutableListOf<ProjectProgress>()
-    projects.forEach {
-        val progress =  ProjectProgress(
-            it.identifier,
-            ProjectState.NOT_STARTED,
-            0,
-            AtomicInteger(0)
-        )
-        progressList.add(progress)
-        launch {
-            progressChannel.send(
-                progress
-            )
-        }
-    }
-
-    val job = launch {
-        projects.forEach {
-            launch {
-                workerPool.start()
-            }
-
-            logger.setProject(it.identifier)
-            val progress = progressList.first { p -> p.name == it.identifier }
-            val preRun = KFlakyPreRunExecutor(it, progress, runId)
-            val odRun = KFlakyOdTestExecutor(it, progress, runId)
-
-            progress.testsToRun = it.preRuns + odRun.testRuns
-
-            preRun.executePreRuns()
-            odRun.runProject()
-
-            workerPool.close()
-            workerPool.join()   //await all test results
-
-            val classifier = KFlakyClassifier(it, progress, runId)
-            classifier.classify()
-
-            progress.state = ProjectState.DONE
-            progressChannel.send(progress)
-        }
-        logChannel.close()
-        progressChannel.close()
-        terminalLogChannel.close()
-    }
-
+    kFlakyRun.configureInitialProjectProgress(this)
+    val job = kFlakyRun.runFlakyDetection(logger, runId, this)
     val terminal = async {
         createTerminal()
     }

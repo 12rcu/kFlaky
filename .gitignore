@@ -35,3 +35,4 @@ remote/
 .gradle/
 
 temp/
+*.jar

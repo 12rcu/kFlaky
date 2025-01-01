@@ -45,6 +45,7 @@ class KFlakyOdTestExecutor(
     }
 
     val testRuns: Int by lazy {
+        if(projectConfig.strategy == TestExecutionStrategy.SKIP) return@lazy 0
         orders.maxOf { o -> o.generatedOrders.size }
     }
 
