@@ -25,6 +25,6 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./build/libs/kFlaky*.jar
+          file: build/libs/kFlaky-0.2.jar
           asset_name: jdk11-kFlaky.jar
           tag: ${{ github.ref }}
