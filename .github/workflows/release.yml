@@ -6,7 +6,7 @@ on:
 
 jobs:
   buildJava8:
-    name: Build Jar files
+    name: Build java 8 jar file
     runs-on: ubuntu-latest
     env:
       JVM_VERSION: 8
@@ -31,7 +31,7 @@ jobs:
           asset_name: jdk8-kFlaky.jar
           tag: ${{ github.ref }}
   buildJava21:
-    name: Build Jar files
+    name: Build java 21 jar file
     runs-on: ubuntu-latest
     env:
       JVM_VERSION: 21
@@ -56,7 +56,7 @@ jobs:
           asset_name: jdk21-kFlaky.jar
           tag: ${{ github.ref }}
   buildJava11:
-    name: Build Jar files
+    name: Build java 11 jar file
     runs-on: ubuntu-latest
     env:
       JVM_VERSION: 11
