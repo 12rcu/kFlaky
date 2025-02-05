@@ -29,7 +29,7 @@ class KFlakyExecutionRecipeTask(
     private val projectProgress: ProjectProgress,
     private val runId: Int,
     private val modifyTestFiles: (rootDir: Path) -> Unit,
-    private val getTestOrderOf: (testSuiteId: String, testId: String) -> List<Int>
+    private val getTestOrderOf: (testSuiteId: String, testId: String) -> List<Int>,
 ) : ExecutionTask, KoinComponent {
     private val sqlLiteDB: SqlLiteDB by inject()
     private val config: KFlakyConfig by inject()
@@ -78,15 +78,18 @@ class KFlakyExecutionRecipeTask(
     }
 
     private suspend fun eval(worker: Int, projectConfig: ProjectConfig) {
-        projectConfig.testResultCollector.collect(getTestResultsPath(worker, projectConfig)).forEach { result ->
-            sqlLiteDB.addTestResult(
-                runId,
-                result,
-                projectConfig.identifier,
-                getTestOrderOf(result.testSuite, result.testName),
-                state = projectState
-            )
-        }
+        projectConfig
+            .testResultCollector
+            .collect(getTestResultsPath(worker, projectConfig))
+            .forEach { result ->
+                sqlLiteDB.addTestResult(
+                    runId,
+                    result,
+                    projectConfig.identifier,
+                    getTestOrderOf(result.testSuite, result.testName),
+                    state = projectState
+                )
+            }
     }
 
     //=============== Utility functions ===============

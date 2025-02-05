@@ -32,6 +32,8 @@ class SqlLiteDB {
     }
 
     suspend fun addTestResult(run: Int, data: TestResultData, project: String, testOrder: List<Int>, state: ProjectState) {
+        if(testOrder.contains(-1))
+            return  //invalid test result detected!
         transactionLock.withPermit {
             database.insert(DBTestResultsTable) {
                 set(it.project, project)

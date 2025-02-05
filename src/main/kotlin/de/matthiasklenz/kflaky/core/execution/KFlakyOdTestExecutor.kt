@@ -35,7 +35,7 @@ class KFlakyOdTestExecutor(
     }
 
     suspend fun runProject() = coroutineScope {
-        if(projectConfig.strategy == TestExecutionStrategy.SKIP)
+        if (projectConfig.strategy == TestExecutionStrategy.SKIP)
             return@coroutineScope
         progressChannel.send(projectProgress)
         //generate orders from initial test src dir
@@ -45,7 +45,7 @@ class KFlakyOdTestExecutor(
     }
 
     val testRuns: Int by lazy {
-        if(projectConfig.strategy == TestExecutionStrategy.SKIP) return@lazy 0
+        if (projectConfig.strategy == TestExecutionStrategy.SKIP) return@lazy 0
         orders.maxOf { o -> o.generatedOrders.size }
     }
 
@@ -114,7 +114,7 @@ class KFlakyOdTestExecutor(
                 testName
             )
         }
-        return order?.orders?.matrix?.getOrNull(index) ?: listOf()
+        return order?.orders?.matrix?.getOrNull(index) ?: listOf(-1)
     }
 }
 
