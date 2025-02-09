@@ -1,0 +1,20 @@
+{
+    "baseDir": "/app",
+    "logDir": "logs",
+    "tmpDir": "temp",
+    "worker": 2,
+    "projects": [
+        {
+            "identifier": "ormlite-core",
+            "framework": "junit",
+            "language": "java",
+            "projectPath": "/app/ormlite-core",
+            "testExecutionCommand": "mvn test",
+            "testResultDir": "target/surefire-reports",
+            "testExecutionDir": "",
+            "testDir": "src/test/java",
+            "strategy": "TUSCAN_SQUARES",
+            "preRuns": 10
+        }
+    ]
+}

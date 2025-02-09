@@ -39,7 +39,7 @@ tasks.test {
     useJUnitPlatform()
 }
 kotlin {
-    jvmToolchain(System.getenv("JVM_VERSION")?.toIntOrNull() ?: 21)
+    jvmToolchain(System.getenv("JVM_VERSION")?.toIntOrNull() ?: 11)
 }
 
 tasks.withType<Jar> {

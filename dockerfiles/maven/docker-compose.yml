@@ -1,0 +1,8 @@
+services:
+  test-maven:
+    build: .
+    command:
+      git clone https://github.com/j256/ormlite-core.git
+    volumes:
+      - ./config.json:/app/config.json
+      - ./default.db:/app/default.db

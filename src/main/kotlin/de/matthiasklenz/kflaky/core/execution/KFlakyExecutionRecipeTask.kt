@@ -61,19 +61,23 @@ class KFlakyExecutionRecipeTask(
     private suspend fun runCommand(worker: Int, projectConfig: ProjectConfig) {
         val execPath = getTestExecPath(worker, projectConfig)
         val execFile = execPath.resolve(projectConfig.testCommand.split(" ").firstOrNull() ?: "")
-        execFile.setPosixFilePermissions(
-            setOf(
-                PosixFilePermission.GROUP_EXECUTE,
-                PosixFilePermission.GROUP_READ,
-                PosixFilePermission.GROUP_WRITE,
-                PosixFilePermission.OTHERS_EXECUTE,
-                PosixFilePermission.OTHERS_READ,
-                PosixFilePermission.OTHERS_WRITE,
-                PosixFilePermission.OWNER_EXECUTE,
-                PosixFilePermission.OWNER_READ,
-                PosixFilePermission.OWNER_WRITE
+        val isWindows = System.getProperty("os.name").lowercase().startsWith("windows");
+
+        if (!isWindows) {
+            execFile.setPosixFilePermissions(
+                setOf(
+                    PosixFilePermission.GROUP_EXECUTE,
+                    PosixFilePermission.GROUP_READ,
+                    PosixFilePermission.GROUP_WRITE,
+                    PosixFilePermission.OTHERS_EXECUTE,
+                    PosixFilePermission.OTHERS_READ,
+                    PosixFilePermission.OTHERS_WRITE,
+                    PosixFilePermission.OWNER_EXECUTE,
+                    PosixFilePermission.OWNER_READ,
+                    PosixFilePermission.OWNER_WRITE
+                )
             )
-        )
+        }
         testCommand.executeTestCommand(projectConfig.testCommand, execPath.toFile(), "worker-$worker")
     }
 
