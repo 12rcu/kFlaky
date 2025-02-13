@@ -4,7 +4,7 @@ A flaky test detector that uses annotations in test frameworks to change the ord
 
 ## Usage
 
-See the usage guide linked in the description.
+See the usage guide [doc](https://12rcu.github.io/kFlaky/#/./pages/Usage).
 
 ## Current state
 

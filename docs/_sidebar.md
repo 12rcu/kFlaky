@@ -2,4 +2,4 @@
 
 * [Home](./README.md)
 * [Usage](./pages/Usage.md)
-* [Development](./pages/Development.md)
+* [Development](./pages/Contributing.md)
