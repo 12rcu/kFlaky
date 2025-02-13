@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    reviewers:
+      - "12rcu"
+    commit-message:
+      prefix: "[gradle dependency]"
+    pull-request-branch-name:
+      separator: "-"
+    schedule:
+      interval: "weekly"
+      day: "friday"
