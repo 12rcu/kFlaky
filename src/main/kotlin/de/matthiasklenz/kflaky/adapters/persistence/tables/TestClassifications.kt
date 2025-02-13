@@ -1,6 +1,6 @@
 package de.matthiasklenz.kflaky.adapters.persistence.tables
 
-import de.matthiasklenz.kflaky.core.detection.FlakyClassification
+import de.matthiasklenz.kflaky.core.classification.FlakyClassification
 import org.ktorm.entity.Entity
 import org.ktorm.schema.Table
 import org.ktorm.schema.enum

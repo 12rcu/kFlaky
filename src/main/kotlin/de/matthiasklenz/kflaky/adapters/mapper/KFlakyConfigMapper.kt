@@ -13,6 +13,7 @@ fun KFlakyConfigDto.map(): KFlakyConfig {
         basePath.resolve(logDir),
         basePath.resolve(tmpDir),
         worker,
-        projects.map { it.map() }
+        projects.map { it.map() },
+        uiEnable
     )
 }

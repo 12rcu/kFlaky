@@ -1,8 +1,8 @@
 package de.matthiasklenz.kflaky.adapters.jUnit
 
-import de.matthiasklenz.kflaky.core.project.TestFramworkConfig
+import de.matthiasklenz.kflaky.core.project.TestFrameworkConfig
 
-class JUnitConfig(override val lanaguage: TestFramworkConfig.Language) : TestFramworkConfig {
+class JUnitConfig(override val language: TestFrameworkConfig.Language) : TestFrameworkConfig {
     override val testAnnotation: Regex = Regex("@Test(\\s|\\n|\\r\\n)")    //otherwise also match @TestMethodOrder we add later to the test
 
     override fun testSuiteStart(): Regex = Regex("(public |private |protected |internal )?class")
@@ -10,14 +10,14 @@ class JUnitConfig(override val lanaguage: TestFramworkConfig.Language) : TestFra
     override fun importStart(): Regex = Regex("package (.*)")
 
     override fun imports(): Set<String> {
-        return when(lanaguage) {
-            TestFramworkConfig.Language.KOTLIN -> setOf(
+        return when(language) {
+            TestFrameworkConfig.Language.KOTLIN -> setOf(
                 "import org.junit.jupiter.api.Disabled",
                 "import org.junit.jupiter.api.Order",
                 "import org.junit.jupiter.api.MethodOrderer",
                 "import org.junit.jupiter.api.TestMethodOrder"
             )
-            TestFramworkConfig.Language.JAVA -> setOf(
+            TestFrameworkConfig.Language.JAVA -> setOf(
                 "import org.junit.jupiter.api.Disabled;",
                 "import org.junit.jupiter.api.Order;",
                 "import org.junit.jupiter.api.MethodOrderer;",
@@ -35,13 +35,13 @@ class JUnitConfig(override val lanaguage: TestFramworkConfig.Language) : TestFra
     }
 
     override fun classOrderAnnontaion(): String {
-        return when (lanaguage) {
-            TestFramworkConfig.Language.KOTLIN -> "@TestMethodOrder(MethodOrderer.OrderAnnotation::class)"
-            TestFramworkConfig.Language.JAVA -> "@TestMethodOrder(MethodOrderer.OrderAnnotation.class)"
+        return when (language) {
+            TestFrameworkConfig.Language.KOTLIN -> "@TestMethodOrder(MethodOrderer.OrderAnnotation::class)"
+            TestFrameworkConfig.Language.JAVA -> "@TestMethodOrder(MethodOrderer.OrderAnnotation.class)"
         }
     }
 
-    override fun isTestContentForTestSuite(testFileContent: String, testSuite: String, test: String): Boolean {
+    override fun isTestContentForTestSuite(testFileContent: String, testSuite: String): Boolean {
         val testSuiteL = testSuite.split(".")
         val packageId = testSuiteL.dropLast(1).joinToString("\\.")
         val className = testSuiteL.last()

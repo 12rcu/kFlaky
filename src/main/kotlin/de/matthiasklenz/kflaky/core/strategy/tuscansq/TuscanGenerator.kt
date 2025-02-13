@@ -1,17 +1,18 @@
 package de.matthiasklenz.kflaky.core.strategy.tuscansq
 
-import kotlinx.serialization.encodeToString
+import de.matthiasklenz.kflaky.core.strategy.AllTuscanCalculations
+import de.matthiasklenz.kflaky.core.strategy.OrderMatrix
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.io.FileNotFoundException
 
 class TuscanGenerator {
-    fun generate(n: Int): TuscanCalculation {
+    fun generate(n: Int): OrderMatrix {
         return generateTuscanSquare(n)
     }
 
     fun generate(): File {
-        val calculations = mutableListOf<TuscanCalculation>()
+        val calculations = mutableListOf<OrderMatrix>()
         val min = 2
         val max = 100
         for (i in min..max) {
@@ -36,9 +37,9 @@ class TuscanGenerator {
         System.arraycopy(a, 0, r[i], 0, a.size)
     }
 
-    private fun generateTuscanSquare(n: Int): TuscanCalculation {
+    private fun generateTuscanSquare(n: Int): OrderMatrix {
         if (n == 3) {
-            return TuscanCalculation(
+            return OrderMatrix(
                 size = 3,
                 listOf(
                     listOf(1, 2, 3),
@@ -48,7 +49,7 @@ class TuscanGenerator {
             )
         }
         if (n == 5) {
-            return TuscanCalculation(
+            return OrderMatrix(
                 size = 5,
                 listOf(
                     listOf(1, 2, 3, 4, 5),
@@ -182,6 +183,6 @@ class TuscanGenerator {
             matrix.add(current)
         }
 
-        return TuscanCalculation(n, matrix)
+        return OrderMatrix(n, matrix)
     }
 }

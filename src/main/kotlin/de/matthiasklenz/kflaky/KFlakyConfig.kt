@@ -14,7 +14,8 @@ data class KFlakyConfigDto(
     val logDir: String = "log",
     val tmpDir: String = "tmp",
     val worker: Int = 8,
-    val projects: List<ProjectConfigDto>
+    val projects: List<ProjectConfigDto>,
+    val uiEnable: Boolean = true,
 )
 
 fun loadConfig(path: Path): KFlakyConfig {
@@ -27,5 +28,6 @@ data class KFlakyConfig(
     val logDir: Path,
     val tmpDir: Path,
     val worker: Int,
-    val projects: List<ProjectConfig>
+    val projects: List<ProjectConfig>,
+    val uiEnable: Boolean,
 )

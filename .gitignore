@@ -32,7 +32,6 @@ logs/
 remote.db
 tmp.txt
 remote/
-.gradle/
 
 temp/
 *.jar

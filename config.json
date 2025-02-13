@@ -1,5 +1,5 @@
 {
-    "baseDir": "/home/matthias/Documents/opensource/kFlaky",
+    "baseDir": "C:\\Users\\matth\\Documents\\opensource\\kFlaky",
     "logDir": "logs",
     "tmpDir": "temp",
     "worker": 2,
@@ -8,23 +8,11 @@
             "identifier": "flakyTestPrj",
             "framework": "junit",
             "language": "kotlin",
-            "projectPath": "/home/matthias/Documents/opensource/flakyProjects/FlakyTestProject",
-            "testExecutionCommand": "./gradlew test",
+            "projectPath": "C:\\Users\\matth\\Documents\\opensource\\flakyTest",
+            "testExecutionCommand": "cmd.exe /c .\\gradlew.bat test",
             "testResultDir": "build/test-results",
             "testExecutionDir": "",
             "testDir": "src/test/kotlin",
-            "strategy": "TUSCAN_SQUARES",
-            "preRuns": 10
-        },
-        {
-            "identifier": "ignite3",
-            "framework": "junit",
-            "language": "java",
-            "projectPath": "/home/matthias/Documents/opensource/flakyProjects/ignite-3",
-            "testExecutionCommand": "./gradlew test",
-            "testResultDir": "",
-            "testExecutionDir": "",
-            "testDir": "",
             "strategy": "TUSCAN_SQUARES",
             "preRuns": 10
         }

@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.1.0"
-    kotlin("plugin.serialization") version "2.1.0"
+    kotlin("jvm") version "2.1.10"
+    kotlin("plugin.serialization") version "2.1.10"
 
     application
 }
@@ -18,21 +18,24 @@ application {
 
 dependencies {
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
     testImplementation(kotlin("test"))
-    implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.6")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
-    implementation("org.fusesource.jansi:jansi:2.4.1")
-    implementation("org.jline:jline:3.26.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
 
     // https://mvnrepository.com/artifact/io.insert-koin/koin-core-coroutines
     implementation("io.insert-koin:koin-core-coroutines:4.1.0-Beta1")
     
     //sql
     implementation("org.ktorm:ktorm-core:4.1.1")
+    //https://mvnrepository.com/artifact/org.ktorm/ktorm-support-sqlite
     implementation("org.ktorm:ktorm-support-sqlite:4.1.1")
-    implementation("org.xerial:sqlite-jdbc:3.47.1.0")
+    //https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    implementation("org.xerial:sqlite-jdbc:3.49.0.0")
+
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    implementation("ch.qos.logback:logback-classic:1.5.16")
+
 }
 
 tasks.test {

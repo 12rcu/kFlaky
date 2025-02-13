@@ -22,20 +22,3 @@ enum class ProjectState {
         return super.toString().lowercase().replace("_", " ")
     }
 }
-
-fun ProjectState.getShort(): String {
-    return when(this) {
-        ProjectState.PRE_RUNS -> "PR"
-        ProjectState.OD_RUNS -> "RN"
-        ProjectState.CLASSIFICATION -> "CV"
-        ProjectState.CLEANUP -> "CL"
-        ProjectState.DONE -> "DN"
-        ProjectState.NOT_STARTED -> "NS"
-        ProjectState.SETUP -> "ST"
-    }
-}
-
-data class TestProgress(
-    val name: String,
-    val progress: Float
-)

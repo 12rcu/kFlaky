@@ -4,9 +4,12 @@ import de.matthiasklenz.kflaky.adapters.persistence.tables.DBRunsTable
 import de.matthiasklenz.kflaky.adapters.persistence.tables.DBTestClassificationsTable
 import de.matthiasklenz.kflaky.adapters.persistence.tables.DBTestResultsEntity
 import de.matthiasklenz.kflaky.adapters.persistence.tables.DBTestResultsTable
-import de.matthiasklenz.kflaky.core.detection.FlakyClassification
+import de.matthiasklenz.kflaky.adapters.persistence.tables.DBTestResultsTable.testOrder
+import de.matthiasklenz.kflaky.core.classification.FlakyClassification
 import de.matthiasklenz.kflaky.core.project.ProjectState
+import de.matthiasklenz.kflaky.core.tasks.TestOutcomeInfo
 import de.matthiasklenz.kflaky.core.tasks.TestResultData
+import de.matthiasklenz.kflaky.core.tasks.TestSuiteResultInfo
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import org.ktorm.database.Database
@@ -14,6 +17,7 @@ import org.ktorm.dsl.and
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.insert
 import org.ktorm.entity.*
+import org.ktorm.support.sqlite.bulkInsert
 
 class SqlLiteDB {
     private val transactionLock = Semaphore(1)
@@ -31,18 +35,29 @@ class SqlLiteDB {
         return database.sequenceOf(DBRunsTable).last().id
     }
 
-    suspend fun addTestResult(run: Int, data: TestResultData, project: String, testOrder: List<Int>, state: ProjectState) {
-        if(testOrder.contains(-1))
-            return  //invalid test result detected!
+    suspend fun addTestResult(
+        data: TestOutcomeInfo,
+        project: String,
+    ) {
         transactionLock.withPermit {
-            database.insert(DBTestResultsTable) {
-                set(it.project, project)
-                set(it.testId, data.testName)
-                set(it.result, data.outcome)
-                set(it.runId, run)
-                set(it.testOrder, testOrder.joinToString(","))
-                set(it.testSuite, data.testSuite)
-                set(it.runType, state)
+            database.bulkInsert(DBTestResultsTable) {
+                data.testSuiteResults.forEach { suite ->
+                    if (suite.order.contains(-1))
+                        return@forEach
+                    suite.testResults.forEach { test ->
+                        item {
+                            set(it.project, project)
+                            set(it.runId, data.runId)
+                            set(it.iteration, data.iteration)
+                            set(it.testOrder, suite.order.joinToString(","))
+                            set(it.runType, data.runType)
+                            set(it.testId, test.testName)
+                            set(it.result, test.outcome)
+                            set(it.testSuite, suite.name)
+                            set(it.raw, suite.raw)
+                        }
+                    }
+                }
             }
         }
     }
@@ -60,7 +75,29 @@ class SqlLiteDB {
             .filter { (it.runId eq runId) and (it.project eq projectId) }
     }
 
-    suspend fun addClassification(runId: Int, projectId: String, suite: String, testId: String, classification: FlakyClassification) {
+    suspend fun addClassification(runId: Int, projectId: String, data: Map<Pair<String, String>, FlakyClassification>) {
+        transactionLock.withPermit {
+            database.bulkInsert(DBTestClassificationsTable) {
+                data.forEach { (id, classification) ->
+                    item {
+                        set(it.runId, runId)
+                        set(it.project, projectId)
+                        set(it.testSuite, id.first)
+                        set(it.testId, id.second)
+                        set(it.classification, classification)
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun addClassification(
+        runId: Int,
+        projectId: String,
+        suite: String,
+        testId: String,
+        classification: FlakyClassification
+    ) {
         transactionLock.withPermit {
             database.insert(DBTestClassificationsTable) {
                 set(it.runId, runId)

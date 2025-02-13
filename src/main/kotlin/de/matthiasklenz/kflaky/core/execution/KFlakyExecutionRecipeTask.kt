@@ -2,42 +2,34 @@ package de.matthiasklenz.kflaky.core.execution
 
 import de.matthiasklenz.kflaky.KFlakyConfig
 import de.matthiasklenz.kflaky.adapters.persistence.SqlLiteDB
-import de.matthiasklenz.kflaky.core.pool.ExecutionTask
 import de.matthiasklenz.kflaky.core.project.ProjectConfig
-import de.matthiasklenz.kflaky.core.project.ProjectProgress
+import de.matthiasklenz.kflaky.core.project.ProjectInfo
+import de.matthiasklenz.kflaky.core.project.ProjectState
+import de.matthiasklenz.kflaky.core.tasks.TestOutcomeInfo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.core.qualifier.qualifier
-import java.io.File
 import java.nio.file.Path
 import java.nio.file.attribute.PosixFilePermission
-import kotlin.io.path.absolutePathString
 import kotlin.io.path.setPosixFilePermissions
 
 /**
- * @param projectIdentifier the id for the project that is used in the db
- * @param projectProgress the inital progress status of the project that is used to update the command line
  * @param runId the runId referenced in the db
  * @param modifyTestFiles a block that is executed to overwrite test files, as parameter, the worker directory for the project is given
  */
 class KFlakyExecutionRecipeTask(
-    private val projectIdentifier: String,
-    private val projectProgress: ProjectProgress,
+    private val projectInfo: ProjectInfo,
     private val runId: Int,
+    private val iteration: Int,
+    private val runType: RunType,
     private val modifyTestFiles: (rootDir: Path) -> Unit,
-    private val getTestOrderOf: (testSuiteId: String, testId: String) -> List<Int>,
+    private val getTestOrderOf: (testSuiteId: String) -> List<Int>,
 ) : ExecutionTask, KoinComponent {
     private val sqlLiteDB: SqlLiteDB by inject()
     private val config: KFlakyConfig by inject()
-    private val progressChannel: Channel<ProjectProgress> by inject(qualifier("progress"))
-
     private val testCommand = OsCommand()
-
-    private val projectState = projectProgress.copy().state //save imutable state when class was initialized
 
     override suspend fun execute(worker: Int) = coroutineScope {
         val conf = getProjectConfig()
@@ -47,8 +39,9 @@ class KFlakyExecutionRecipeTask(
             runCommand(worker, conf)
         }
         eval(worker, conf)
-        projectProgress.index.set(projectProgress.index.get() + 1)
-        progressChannel.send(projectProgress)
+        projectInfo.progress.state = if (runType == RunType.OD) ProjectState.OD_RUNS else ProjectState.PRE_RUNS
+        projectInfo.progress.index.addAndGet(1)
+        return@coroutineScope
     }
 
     private fun cleanAndCopyProjectToWorkingDir(worker: Int) {
@@ -82,18 +75,14 @@ class KFlakyExecutionRecipeTask(
     }
 
     private suspend fun eval(worker: Int, projectConfig: ProjectConfig) {
-        projectConfig
+        val testSuitResults = projectConfig
             .testResultCollector
-            .collect(getTestResultsPath(worker, projectConfig))
-            .forEach { result ->
-                sqlLiteDB.addTestResult(
-                    runId,
-                    result,
-                    projectConfig.identifier,
-                    getTestOrderOf(result.testSuite, result.testName),
-                    state = projectState
-                )
-            }
+            .collect(getTestResultsPath(worker, projectConfig), getTestOrderOf)
+
+        sqlLiteDB.addTestResult(
+            TestOutcomeInfo(runId, iteration, runType, testSuitResults),
+            projectInfo.config.identifier
+        )
     }
 
     //=============== Utility functions ===============
@@ -128,6 +117,6 @@ class KFlakyExecutionRecipeTask(
 
     private fun getProjectConfig(): ProjectConfig {
         //we assert that the project exists
-        return config.projects.first { it.identifier == projectIdentifier }
+        return config.projects.first { it.identifier == projectInfo.config.identifier }
     }
 }

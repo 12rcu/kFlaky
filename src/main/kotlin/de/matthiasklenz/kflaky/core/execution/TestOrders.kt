@@ -1,17 +1,19 @@
 package de.matthiasklenz.kflaky.core.execution
 
-import de.matthiasklenz.kflaky.core.strategy.tuscansq.TuscanCalculation
-import java.io.File
-
 /**
  * @param filePath the relative path (from the project root) to the location of the test file
- * @param content the inital test file content (witjout any order annotation)
+ * @param content the initial test file content (without any order annotation)
  * @param generatedOrders list of test file content with order annotations
- * @param orders info object about the orderes generated for this specifc test suite
+ * @param orders info object about the orders generated for this specific test suite
  */
 data class TestOrders(
     val filePath: String,
     val content: String,
     val generatedOrders: List<String>,
-    val orders: TuscanCalculation
+    val orders: TestOrderMatrix
 )
+
+interface TestOrderMatrix {
+    val size: Int
+    val matrix: List<List<Int>>
+}
