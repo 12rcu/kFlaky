@@ -2,10 +2,34 @@
 
 ## Docker
 
-In the `/run/docker` directory modify or create a config.json that should be used, see the config section (for linux)
-down below.
+### Option 1 Prebuild
 
-If you don't use the 
+A docker-compose.yml can look like this:
+
+````yml
+services:
+  kflaky:
+    image: 12build/kflaky:latest
+    container_name: kFlaky
+    volumes:
+      - ./run/default.db:/app/default.db
+      - ./run/docker/maven-config.json:/app/config.json
+      - ./run/logs:/app/logs
+      - ./run/temp:/app/temp  # optional - for debug purposes
+````
+
+Download the `default.db` file and `config.json` from this repo to have a starting point.
+
+In the `/run/docker` directory there are samples for the config.json that can be used - also see the config section 
+(for linux) down below.
+
+### Option 2 Local Build
+
+1. clone this repo
+2. run `docker compose build`
+3. modify the docker compose file with the mounted config.yml
+4. run `docker compose up -d` to run docker detached
+5. run `docker logs -f kFlaky` to follow the logs
 
 ## Local Setup
 
