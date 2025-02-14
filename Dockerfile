@@ -12,4 +12,4 @@ RUN export JAVA_HOME=/usr/lib/jvm/openjdk-11
 
 COPY --from=kflaky /app/build/libs/kFlaky-0.2.jar /app/kFlkay.jar
 
-CMD ["java", "-jar", "kFlkay.jar"]
+ENTRYPOINT ["java", "-jar", "kFlkay.jar"]

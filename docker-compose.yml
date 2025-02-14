@@ -7,3 +7,7 @@ services:
       - ./run/docker/maven-config.json:/app/config.json
       - ./run/logs:/app/logs
       - ./run/temp:/app/temp
+    deploy:
+      resources:
+        limits:
+          memory: 8GB
