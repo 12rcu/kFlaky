@@ -13,4 +13,4 @@ RUN export MAVEN_OPTS="-Xmx4000m" # increase memory limit for maven executions
 
 COPY --from=kflaky /app/build/libs/kFlaky-0.2.jar /app/kFlkay.jar
 
-ENTRYPOINT ["java", "-jar", "kFlkay.jar"]
+ENTRYPOINT ["java", "-Xmx4096M", "-jar", "kFlkay.jar"]
