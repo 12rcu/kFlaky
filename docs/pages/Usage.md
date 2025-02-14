@@ -2,7 +2,10 @@
 
 ## Docker
 
-wip
+In the `/run/docker` directory modify or create a config.json that should be used, see the config section (for linux)
+down below.
+
+If you don't use the 
 
 ## Local Setup
 
@@ -36,11 +39,11 @@ is taken care of by the config.
 - identifier: an internal identifier for a project, must be unique!
 - framework: the framework the project uses, currently only junit
 - language: the language of the project, currently only kotlin and java
-- projectPath: the absolute path to the project that should be tested
-- testExecutionDir: relative path to the projectPath in which the test exec command should be run, for gradle/maven this is empty as it's just the project dir
+- projectUri: the absolute path to the project that should be tested or a git url that points to the project
+- testExecutionDir: relative path to the projectUri in which the test exec command should be run, for gradle/maven this is empty as it's just the project dir
 - testExecutionCommand: the command that is run within the testExecution directory that executes the tests
-- testResultDir: optional, a directory relative to the projectPath to search for test result files
-- testDir: optional, a directory relative to the projectPath to search for test files
+- testResultDir: optional, a directory relative to the projectUri to search for test result files
+- testDir: optional, a directory relative to the projectUri to search for test files
 - strategy: the order strategy that should be used to modify test files, currently only TUSCAN_SQUARES or SKIP (only runs the pre runs)
 - preRuns: the number of test runs kFlaky should do to determine if tests have other sources of flakiness
 
@@ -58,7 +61,7 @@ is taken care of by the config.
             "identifier": "flakyTestPrj",                                                           //identifier for the databse
             "framework": "junit",                                                                   //framework currently only jUnit is supported
             "language": "kotlin",                                                                   //language, java and kotlin is supported
-            "projectPath": "/home/matthias/Documents/opensource/flakyProjects/FlakyTestProject",    //the absolute path to the project
+            "projectUri": "/home/matthias/Documents/opensource/flakyProjects/FlakyTestProject",    //the absolute path to the project
             "testExecutionCommand": "./gradlew test",                                               //command to execute tests
             "testResultDir": "build/test-results",                                                  //the test reulsts dir (can be empty, seaching for these files happens then in the entiere project)
             "testExecutionDir": "",                                                                 //for gradle this is just the project root dir
@@ -83,7 +86,7 @@ is taken care of by the config.
             "identifier": "flakyTestPrj",
             "framework": "junit",
             "language": "kotlin",
-            "projectPath": "C:\\Users\\matth\\Documents\\opensource\\flakyTest",
+            "projectUri": "C:\\Users\\matth\\Documents\\opensource\\flakyTest",
             "testExecutionCommand": "cmd.exe /c .\\gradlew.bat test",
             "testResultDir": "build/test-results",
             "testExecutionDir": "",

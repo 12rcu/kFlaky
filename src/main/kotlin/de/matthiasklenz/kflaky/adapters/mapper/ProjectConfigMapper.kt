@@ -6,6 +6,7 @@ import de.matthiasklenz.kflaky.adapters.project.ProjectConfigDto
 import de.matthiasklenz.kflaky.core.project.ProjectConfig
 import de.matthiasklenz.kflaky.core.project.TestFrameworkConfig
 import de.matthiasklenz.kflaky.core.tasks.CollectResults
+import java.nio.file.Path
 import java.nio.file.Paths
 
 fun ProjectConfigDto.map(): ProjectConfig {
@@ -19,11 +20,11 @@ fun ProjectConfigDto.map(): ProjectConfig {
         else -> throw NotImplementedError("This framework is currently not implemented!")
     }
 
-    val projectPath = Paths.get(this.projectPath)
-
+    val projectPath: Path = Paths.get(this.projectUri)
     return ProjectConfig(
         identifier,
         frameworkConfig,
+        this.projectUri,
         projectPath,
         testExecutionDir,
         testResultDir,

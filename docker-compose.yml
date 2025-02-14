@@ -1,0 +1,8 @@
+services:
+  kflaky:
+    build: .
+    container_name: kFlaky
+    volumes:
+      - ./run/default.db:/app/default.db
+      - ./run/docker/gradle-config.json:/app/config.json
+      - ./run/logs:/app/logs

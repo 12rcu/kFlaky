@@ -1,8 +1,0 @@
-services:
-  test-maven:
-    container_name: test-maven
-    build: .
-    volumes:
-      - ./config.json:/app/config.json
-      - ./default.db:/app/default.db
-      - ./logs:/app/logs

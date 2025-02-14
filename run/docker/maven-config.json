@@ -1,0 +1,20 @@
+{
+  "baseDir": "/app",
+  "logDir": "logs",
+  "tmpDir": "temp",
+  "worker": 2,
+  "projects": [
+    {
+      "identifier": "flakyTestPrj",
+      "framework": "junit",
+      "language": "kotlin",
+      "projectUri": "/app/project",
+      "testExecutionCommand": "mvn clean test",
+      "testResultDir": "target",
+      "testExecutionDir": "",
+      "testDir": "src/test/kotlin",
+      "strategy": "TUSCAN_SQUARES",
+      "preRuns": 10
+    }
+  ]
+}

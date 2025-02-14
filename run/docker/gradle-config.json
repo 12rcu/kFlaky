@@ -1,0 +1,20 @@
+{
+  "baseDir": "/app",
+  "logDir": "logs",
+  "tmpDir": "temp",
+  "worker": 2,
+  "projects": [
+    {
+      "identifier": "flakyTestPrj",
+      "framework": "junit",
+      "language": "kotlin",
+      "projectUri": "https://github.com/LotsOfPixelsStudios/Monstera.git",
+      "testExecutionCommand": "./gradlew test",
+      "testResultDir": "build/test-results",
+      "testExecutionDir": "",
+      "testDir": "src/test/kotlin",
+      "strategy": "TUSCAN_SQUARES",
+      "preRuns": 10
+    }
+  ]
+}

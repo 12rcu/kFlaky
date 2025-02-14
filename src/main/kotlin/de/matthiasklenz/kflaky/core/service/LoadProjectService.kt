@@ -1,5 +1,9 @@
 package de.matthiasklenz.kflaky.core.service
 
+import de.matthiasklenz.kflaky.KFlakyConfig
+import de.matthiasklenz.kflaky.adapters.mapper.map
+import de.matthiasklenz.kflaky.adapters.project.ProjectConfigDto
+import de.matthiasklenz.kflaky.core.middleware.KFlakyLogger
 import de.matthiasklenz.kflaky.core.project.ProjectConfig
 import de.matthiasklenz.kflaky.core.project.ProjectInfo
 import de.matthiasklenz.kflaky.core.project.ProjectProgress
@@ -8,13 +12,31 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.qualifier
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.io.path.Path
+import kotlin.io.path.exists
 
 class LoadProjectService : KoinComponent {
     private val projects: HashMap<String, ProjectInfo> by inject(qualifier("projects"))
+    private val gitService: GitService by inject()
+    private val config: KFlakyConfig by inject()
+    private val logger: KFlakyLogger by inject()
 
-    fun loadProject(projectConfig: ProjectConfig): ProjectInfo {
+    suspend fun loadProject(projectConfig: ProjectConfig): ProjectInfo {
+        val log = logger.get("ProjectInit")
+
         if(projects.contains(projectConfig.identifier)) {
             return projects[projectConfig.identifier]!!
+        }
+
+        if(projectConfig.projectUri.endsWith(".git") && !Path(projectConfig.projectUri).exists()) {
+            val targetDir = config.tmpDir.resolve("projects").resolve(projectConfig.identifier).toFile()
+            targetDir.mkdirs()
+            val status = gitService.download(projectConfig.projectUri, targetDir)
+            if(status != 0) {
+                log.error("Failed to download project ${projectConfig.identifier}, details in log file!")
+                error("Failed to download project ${projectConfig.identifier}: $status")
+            }
+            projectConfig.projectPath = targetDir.toPath()
         }
 
         val progress = ProjectProgress(
