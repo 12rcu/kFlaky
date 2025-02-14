@@ -32,7 +32,7 @@ class KFlakyLogger {
             send(name, "DEBUG", msg)
         }
 
-        override fun log(msg: String) {
+        override fun info(msg: String) {
             logger.info(msg)
             send(name, "LOG", msg)
         }
@@ -52,7 +52,7 @@ class KFlakyLogger {
 interface Logger {
     val name: String
     fun debug(msg: String)
-    fun log(msg: String)
+    fun info(msg: String)
     fun warn(msg: String)
     fun error(msg: String)
 }

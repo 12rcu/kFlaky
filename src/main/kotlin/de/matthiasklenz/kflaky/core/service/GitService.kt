@@ -19,6 +19,11 @@ class GitService: KoinComponent {
     suspend fun download(url: String, targetDir: File): Int = coroutineScope {
         val l = logger.get("GitService")
 
+        if(targetDir.exists()) {
+            targetDir.deleteRecursively()
+        }
+        targetDir.mkdirs()
+
         val processBuilder = ProcessBuilder("git", "clone", url, ".")
         processBuilder.directory(targetDir)
         val process = processBuilder.start()

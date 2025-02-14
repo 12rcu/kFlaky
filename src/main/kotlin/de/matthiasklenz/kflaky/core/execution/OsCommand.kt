@@ -19,7 +19,7 @@ class OsCommand: KoinComponent {
         processBuilder.directory(directory)
         processBuilder.redirectErrorStream(true)
 
-        l.log("[$worker] Execute $command in ${directory.absolutePath}")
+        l.info("[$worker] Execute $command in ${directory.absolutePath}")
 
         val process = processBuilder.start()
         val reader = BufferedReader(InputStreamReader(process.inputStream))
@@ -31,7 +31,7 @@ class OsCommand: KoinComponent {
         }
 
         val exitCode = process.waitFor()
-        l.log("[$worker] Command $command in ${directory.absolutePath} exited with code: $exitCode")
+        l.info("[$worker] Command $command in ${directory.absolutePath} exited with code: $exitCode")
         if (exitCode != 0)
             l.warn("[$worker] ERROR: exit code $exitCode for command: $command in dir: ${directory.absolutePath}")
     }

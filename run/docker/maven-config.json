@@ -5,16 +5,30 @@
   "worker": 2,
   "projects": [
     {
-      "identifier": "flakyTestPrj",
+      "identifier": "ormlite",
       "framework": "junit",
-      "language": "kotlin",
-      "projectUri": "/app/project",
-      "testExecutionCommand": "mvn clean test",
-      "testResultDir": "target",
+      "language": "java",
+      "projectUri": "https://github.com/j256/ormlite-core.git",
+      "testExecutionCommand": "/usr/share/maven/bin/mvn test -f pom.xml",
+      "testResultDir": "target/surefire-reports",
       "testExecutionDir": "",
-      "testDir": "src/test/kotlin",
+      "testDir": "src/test/java",
       "strategy": "TUSCAN_SQUARES",
-      "preRuns": 10
+      "preRuns": 10,
+      "enabled": true
+    },
+    {
+      "identifier": "delight-nashorn-sandbox",
+      "framework": "junit",
+      "language": "java",
+      "projectUri": "https://github.com/javadelight/delight-nashorn-sandbox.git",
+      "testExecutionCommand": "/usr/share/maven/bin/mvn test -f pom.xml",
+      "testResultDir": "target/surefire-reports",
+      "testExecutionDir": "",
+      "testDir": "src/test/java",
+      "strategy": "TUSCAN_SQUARES",
+      "preRuns": 10,
+      "enabled": false
     }
   ]
 }

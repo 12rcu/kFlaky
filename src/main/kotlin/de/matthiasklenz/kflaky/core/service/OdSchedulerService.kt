@@ -21,14 +21,17 @@ class OdSchedulerService : KoinComponent {
     private val testModificationService: TestModificationService by inject()
 
     suspend fun scheduleOdRuns(projectInfo: ProjectInfo, runId: Int, workerPool: WorkerPool) {
+        val log =logger.get("OdRun Scheduler")
         val testFiles = testFiles(projectInfo)
+        if(testFiles.isEmpty()) {
+            log.warn("No test files found!")
+            return
+        }
         val orders = orders(projectInfo, testFiles)
         val testRuns = getTestRuns(projectInfo, orders)
 
         for (i in 0 until testRuns) {
-            logger
-                .get("OdRun Scheduler")
-                .log("[${projectInfo.config.identifier}] Scheduled OD test execution ${i + 1}/$testRuns")
+                log.info("[${projectInfo.config.identifier}] Scheduled OD test execution ${i + 1}/$testRuns")
             val task = KFlakyExecutionRecipeTask(
                 projectInfo,
                 runId,

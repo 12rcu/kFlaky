@@ -38,9 +38,12 @@ class SqlLiteDB {
     suspend fun addTestResult(
         data: TestOutcomeInfo,
         project: String,
-    ) {
+    ): Int {
+        if(data.testSuiteResults.isEmpty()) {
+            return 0
+        }
         transactionLock.withPermit {
-            database.bulkInsert(DBTestResultsTable) {
+            return database.bulkInsert(DBTestResultsTable) {
                 data.testSuiteResults.forEach { suite ->
                     if (suite.order.contains(-1))
                         return@forEach

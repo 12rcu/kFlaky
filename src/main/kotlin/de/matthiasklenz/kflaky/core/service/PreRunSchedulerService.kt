@@ -18,7 +18,7 @@ class PreRunSchedulerService : KoinComponent {
         for (index in 0 until projectInfo.config.preRuns) {
             logger
                 .get("PreRun Scheduler")
-                .log(
+                .info(
                     "[${projectInfo.config.identifier}] Scheduled pre test execution ${index + 1}/${projectInfo.config.preRuns}"
                 )
             val task = KFlakyExecutionRecipeTask(

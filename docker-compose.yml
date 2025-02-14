@@ -4,5 +4,6 @@ services:
     container_name: kFlaky
     volumes:
       - ./run/default.db:/app/default.db
-      - ./run/docker/gradle-config.json:/app/config.json
+      - ./run/docker/maven-config.json:/app/config.json
       - ./run/logs:/app/logs
+      - ./run/temp:/app/temp

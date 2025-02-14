@@ -24,7 +24,8 @@ class JUnitResultCollection : CollectResults {
                 try {
                     mapper.readValue(it, TestSuite::class.java)
                 } catch (e: Exception) {
-                    null
+                    e.printStackTrace()
+                    throw RuntimeException(e)
                 } to it
             }
             .filter { it.first != null }
@@ -47,15 +48,6 @@ class JUnitResultCollection : CollectResults {
             }
             result
         }.toList()
-
-        //delete files just to be safe
-        files.forEach {
-            try {
-                it.delete()
-            } catch (_: Exception) {
-            }
-        }
-
         return ret
     }
 }

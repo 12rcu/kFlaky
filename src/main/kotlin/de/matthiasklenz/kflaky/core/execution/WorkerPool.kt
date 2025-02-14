@@ -19,10 +19,10 @@ class WorkerPool(workerCount: Int) : KoinComponent {
 
     suspend fun start() = coroutineScope {
         val log = logger.get("WorkerPool")
-        log.log("Worker pool started.")
+        log.info("Worker pool started.")
         launch {
             lockJobs.acquire()
-            log.log("Ready for tasks.")
+            log.info("Ready for tasks.")
             for (task in channel) {
                 val job = launch(Dispatchers.IO) {
                     workers.withPermit {

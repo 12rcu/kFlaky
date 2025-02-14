@@ -14,12 +14,21 @@ class ExecutionService: KoinComponent {
     private val sqlLiteDB: SqlLiteDB by inject()
     private val config: KFlakyConfig by inject()
 
+    private val projectValidationService: ProjectValidationService by inject()
+
     private val preRunScheduler: PreRunSchedulerService by inject()
     private val odRunScheduler: OdSchedulerService by inject()
     private val classificationService: ClassificationService by inject()
 
     suspend fun executeNewRun(projects: List<ProjectInfo>) = coroutineScope {
         val runId = sqlLiteDB.addRun(projects.map { it.config.identifier })
+
+        projects.forEach {
+            it.progress.state = ProjectState.VALIDATING
+            if(!projectValidationService.validate(runId, it)) {
+                error("Could not validate project: ${it.config.identifier}!")
+            }
+        }
 
         projects.forEach {
             it.progress.state = ProjectState.NOT_STARTED

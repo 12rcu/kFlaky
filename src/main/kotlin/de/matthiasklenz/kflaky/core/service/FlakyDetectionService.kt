@@ -5,10 +5,8 @@ import de.matthiasklenz.kflaky.adapters.persistence.tables.DBTestResultsTable
 import de.matthiasklenz.kflaky.core.classification.FlakyClassification
 import de.matthiasklenz.kflaky.core.execution.RunType
 import de.matthiasklenz.kflaky.core.middleware.KFlakyLogger
-import kotlinx.coroutines.channels.Channel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.core.qualifier.qualifier
 import org.ktorm.entity.EntitySequence
 import org.ktorm.entity.toList
 
@@ -30,7 +28,7 @@ class FlakyDetectionService: KoinComponent {
             if (preRunResults.distinct().size > 1) {
                 classification = FlakyClassification.OTHER_FLAKY
             }
-            logger.get("FlakyDetectionService").log("[${id.first}|${id.second}] is: $classification")
+            logger.get("FlakyDetectionService").info("[${id.first}|${id.second}] is: $classification")
             id to classification
         }.toMap()
     }

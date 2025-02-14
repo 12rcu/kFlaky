@@ -24,6 +24,7 @@ fun configureDj(initModule: Module) {
                 single { PreRunSchedulerService() }
                 single { WorkerService() }
                 single { ClassificationService() }
+                single { ProjectValidationService() }
             }
         )
     }

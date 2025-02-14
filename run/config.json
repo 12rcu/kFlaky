@@ -1,18 +1,18 @@
 {
-    "baseDir": "C:\\Users\\matth\\Documents\\opensource\\kFlaky",
+    "baseDir": "C:\\Users\\matth\\Documents\\opensource\\kFlaky\\run",
     "logDir": "logs",
     "tmpDir": "temp",
     "worker": 2,
     "projects": [
         {
-            "identifier": "flakyTestPrj",
+            "identifier": "ormlite",
             "framework": "junit",
-            "language": "kotlin",
-            "projectUri": "C:\\Users\\matth\\Documents\\opensource\\flakyTest",
-            "testExecutionCommand": "cmd.exe /c .\\gradlew.bat test",
-            "testResultDir": "build/test-results",
+            "language": "java",
+            "projectUri": "https://github.com/j256/ormlite-core.git",
+            "testExecutionCommand": "mvn clean test",
+            "testResultDir": "target",
             "testExecutionDir": "",
-            "testDir": "src/test/kotlin",
+            "testDir": "src/test/java",
             "strategy": "TUSCAN_SQUARES",
             "preRuns": 10
         }

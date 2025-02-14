@@ -2,6 +2,7 @@ package de.matthiasklenz.kflaky.core.execution
 
 import de.matthiasklenz.kflaky.KFlakyConfig
 import de.matthiasklenz.kflaky.adapters.persistence.SqlLiteDB
+import de.matthiasklenz.kflaky.core.middleware.KFlakyLogger
 import de.matthiasklenz.kflaky.core.project.ProjectConfig
 import de.matthiasklenz.kflaky.core.project.ProjectInfo
 import de.matthiasklenz.kflaky.core.project.ProjectState
@@ -30,6 +31,7 @@ class KFlakyExecutionRecipeTask(
     private val sqlLiteDB: SqlLiteDB by inject()
     private val config: KFlakyConfig by inject()
     private val testCommand = OsCommand()
+    private val logger: KFlakyLogger by inject()
 
     override suspend fun execute(worker: Int) = coroutineScope {
         val conf = getProjectConfig()
@@ -75,14 +77,19 @@ class KFlakyExecutionRecipeTask(
     }
 
     private suspend fun eval(worker: Int, projectConfig: ProjectConfig) {
+        val log = logger.get("ExecTask")
+
         val testSuitResults = projectConfig
             .testResultCollector
             .collect(getTestResultsPath(worker, projectConfig), getTestOrderOf)
 
-        sqlLiteDB.addTestResult(
+        val ops = sqlLiteDB.addTestResult(
             TestOutcomeInfo(runId, iteration, runType, testSuitResults),
             projectInfo.config.identifier
         )
+        if (ops == 0) {
+            log.warn("No test results found for id $runId in iteration $iteration of project ${projectConfig.identifier}")
+        }
     }
 
     //=============== Utility functions ===============

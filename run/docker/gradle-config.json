@@ -5,7 +5,7 @@
   "worker": 2,
   "projects": [
     {
-      "identifier": "flakyTestPrj",
+      "identifier": "monstera",
       "framework": "junit",
       "language": "kotlin",
       "projectUri": "https://github.com/LotsOfPixelsStudios/Monstera.git",

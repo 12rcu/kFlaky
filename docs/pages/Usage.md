@@ -46,6 +46,7 @@ is taken care of by the config.
 - testDir: optional, a directory relative to the projectUri to search for test files
 - strategy: the order strategy that should be used to modify test files, currently only TUSCAN_SQUARES or SKIP (only runs the pre runs)
 - preRuns: the number of test runs kFlaky should do to determine if tests have other sources of flakiness
+- enabled: optional, default true - if false the project will be ignored by kFlkay
 
 
 #### Sample Linux:

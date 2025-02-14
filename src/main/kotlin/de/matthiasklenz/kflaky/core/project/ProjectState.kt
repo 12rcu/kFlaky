@@ -16,6 +16,7 @@ enum class ProjectState {
     OD_RUNS,
     CLASSIFICATION,
     CLEANUP,
+    VALIDATING,
     DONE;
 
     override fun toString(): String {
