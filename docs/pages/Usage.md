@@ -19,7 +19,7 @@ services:
 ````
 
 Download the `default.db` file and `config.json` from this repo to have a starting point.
-(to download the db run: `curl -O https://github.com/12rcu/kFlaky/blob/main/run/default.db`)
+(to download the db run: `curl -O https://raw.githubusercontent.com/12rcu/kFlaky/main/run/default.db`)
 
 In the `/run/docker` directory there are samples for the config.json that can be used - also see the config section 
 (for linux) down below.
