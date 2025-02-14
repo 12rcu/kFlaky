@@ -9,7 +9,7 @@ A docker-compose.yml can look like this:
 ````yml
 services:
   kflaky:
-    image: 12build/kflaky:latest
+    image: 12build/kflkay:latest
     container_name: kFlaky
     volumes:
       - ./run/default.db:/app/default.db
@@ -19,6 +19,7 @@ services:
 ````
 
 Download the `default.db` file and `config.json` from this repo to have a starting point.
+(to download the db run: `curl -O https://github.com/12rcu/kFlaky/blob/main/run/default.db`)
 
 In the `/run/docker` directory there are samples for the config.json that can be used - also see the config section 
 (for linux) down below.
