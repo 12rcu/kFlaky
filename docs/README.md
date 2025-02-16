@@ -13,3 +13,5 @@ See the usage page for more information.
 ## Contributing
 
 All contributions are welcome. This project uses a hexagonal structure, see the contribution page for more information.
+
+![hexagonal structure](./assets/hexagonal.png)
