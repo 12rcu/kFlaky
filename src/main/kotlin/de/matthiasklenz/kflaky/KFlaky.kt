@@ -1,6 +1,7 @@
 package de.matthiasklenz.kflaky
 
 import de.matthiasklenz.kflaky.core.middleware.configureDj
+import de.matthiasklenz.kflaky.core.project.ProjectInfo
 import de.matthiasklenz.kflaky.core.service.ExecutionService
 import de.matthiasklenz.kflaky.core.service.LoadProjectService
 import kotlinx.coroutines.runBlocking
@@ -16,14 +17,15 @@ fun main() = runBlocking {
 
     val initModule = module {
         single { config }
-        single { projects }
-
         single { executionService }
         single { projectService }
     }
 
     configureDj(initModule)
-    val pInfos = projects.map { projectService.loadProject(it) }
+    val pInfos: MutableList<ProjectInfo> = mutableListOf()
+    pInfos.addAll(projects.map { projectService.loadProject(it) })
+    if(config.githubQuery != null)
+        pInfos.addAll(projectService.searchAndLoadProject(config.githubQuery))
     executionService.executeNewRun(pInfos).join()
 
     return@runBlocking

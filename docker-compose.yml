@@ -4,7 +4,7 @@ services:
     container_name: kFlaky
     volumes:
       - ./run/default.db:/app/default.db
-      - ./run/docker/maven-config.json:/app/config.json
+      - ./run/docker/github-config.json:/app/config.json
       - ./run/logs:/app/logs
       - ./run/temp:/app/temp
     deploy:

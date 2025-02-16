@@ -1,0 +1,10 @@
+{
+  "baseDir": "/app",
+  "logDir": "logs",
+  "tmpDir": "temp",
+  "worker": 2,
+  "githubQuery": {
+    "token": "<token>",
+    "query": "q=language:java+pushed:>2020-01-01+stars:50..700+size:<500000&sort=stars&order=desc&per_page=10"
+  }
+}

@@ -1,6 +1,11 @@
 FROM gradle:8-jdk11-corretto AS kflaky
 WORKDIR /app
-COPY . .
+COPY ./src ./src
+COPY ./gradle ./gradle
+COPY ./gradlew ./gradlew
+COPY ./gradlew.bat ./gradlew.bat
+COPY ./build.gradle.kts ./build.gradle.kts
+COPY ./settings.gradle.kts ./settings.gradle.kts
 RUN chmod +x ./gradlew
 RUN ./gradlew build -x test
 

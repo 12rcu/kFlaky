@@ -3,6 +3,7 @@ package de.matthiasklenz.kflaky.core.service
 import de.matthiasklenz.kflaky.KFlakyConfig
 import de.matthiasklenz.kflaky.adapters.persistence.SqlLiteDB
 import de.matthiasklenz.kflaky.core.execution.WorkerPool
+import de.matthiasklenz.kflaky.core.middleware.KFlakyLogger
 import de.matthiasklenz.kflaky.core.project.ProjectInfo
 import de.matthiasklenz.kflaky.core.project.ProjectState
 import kotlinx.coroutines.coroutineScope
@@ -13,6 +14,7 @@ import org.koin.core.component.inject
 class ExecutionService: KoinComponent {
     private val sqlLiteDB: SqlLiteDB by inject()
     private val config: KFlakyConfig by inject()
+    private val logger: KFlakyLogger by inject()
 
     private val projectValidationService: ProjectValidationService by inject()
 
@@ -21,12 +23,14 @@ class ExecutionService: KoinComponent {
     private val classificationService: ClassificationService by inject()
 
     suspend fun executeNewRun(projects: List<ProjectInfo>) = coroutineScope {
+        val log = logger.get("ExecutionService")
         val runId = sqlLiteDB.addRun(projects.map { it.config.identifier })
 
         projects.forEach {
             it.progress.state = ProjectState.VALIDATING
             if(!projectValidationService.validate(runId, it)) {
-                error("Could not validate project: ${it.config.identifier}!")
+                log.error("Could not validate project: ${it.config.identifier}!")
+                //error("Could not validate project: ${it.config.identifier}!")
             }
         }
 

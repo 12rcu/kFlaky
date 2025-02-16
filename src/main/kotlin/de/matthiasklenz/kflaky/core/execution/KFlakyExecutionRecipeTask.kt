@@ -33,50 +33,32 @@ class KFlakyExecutionRecipeTask(
     private val testCommand = OsCommand()
     private val logger: KFlakyLogger by inject()
 
-    override suspend fun execute(worker: Int) = coroutineScope {
-        val conf = getProjectConfig()
+    override suspend fun execute(worker: Int): Int = coroutineScope {
         cleanAndCopyProjectToWorkingDir(worker)
         modifyTestFiles(getWorkerDir(worker))  //to overwrite the tests, the project root dir is given of the worker
         withContext(Dispatchers.IO) {
-            runCommand(worker, conf)
+            runCommand(worker, projectInfo.config)
         }
-        eval(worker, conf)
+        val results = eval(worker, projectInfo.config)
         projectInfo.progress.state = if (runType == RunType.OD) ProjectState.OD_RUNS else ProjectState.PRE_RUNS
         projectInfo.progress.index.addAndGet(1)
-        return@coroutineScope
+        return@coroutineScope results
     }
 
     private fun cleanAndCopyProjectToWorkingDir(worker: Int) {
         val workerPath = getWorkerDir(worker)
         workerPath.toFile().deleteRecursively()
         workerPath.toFile().mkdirs()
-        getProjectConfig().projectPath.toFile().copyRecursively(workerPath.toFile())
+        projectInfo.config.projectPath.toFile().copyRecursively(workerPath.toFile())
     }
 
     private suspend fun runCommand(worker: Int, projectConfig: ProjectConfig) {
         val execPath = getTestExecPath(worker, projectConfig)
-        val execFile = execPath.resolve(projectConfig.testCommand.split(" ").firstOrNull() ?: "")
-        val isWindows = System.getProperty("os.name").lowercase().startsWith("windows");
-
-        if (!isWindows) {
-            execFile.setPosixFilePermissions(
-                setOf(
-                    PosixFilePermission.GROUP_EXECUTE,
-                    PosixFilePermission.GROUP_READ,
-                    PosixFilePermission.GROUP_WRITE,
-                    PosixFilePermission.OTHERS_EXECUTE,
-                    PosixFilePermission.OTHERS_READ,
-                    PosixFilePermission.OTHERS_WRITE,
-                    PosixFilePermission.OWNER_EXECUTE,
-                    PosixFilePermission.OWNER_READ,
-                    PosixFilePermission.OWNER_WRITE
-                )
-            )
-        }
+        testCommand.setExecPerms(projectConfig.testCommand, execPath.toFile())
         testCommand.executeTestCommand(projectConfig.testCommand, execPath.toFile(), "worker-$worker")
     }
 
-    private suspend fun eval(worker: Int, projectConfig: ProjectConfig) {
+    private suspend fun eval(worker: Int, projectConfig: ProjectConfig): Int {
         val log = logger.get("ExecTask")
 
         val testSuitResults = projectConfig
@@ -90,6 +72,8 @@ class KFlakyExecutionRecipeTask(
         if (ops == 0) {
             log.warn("No test results found for id $runId in iteration $iteration of project ${projectConfig.identifier}")
         }
+
+        return ops
     }
 
     //=============== Utility functions ===============
@@ -120,10 +104,5 @@ class KFlakyExecutionRecipeTask(
 
     private fun getWorkerDir(worker: Int): Path {
         return config.tmpDir.resolve("workers").resolve("worker-$worker")
-    }
-
-    private fun getProjectConfig(): ProjectConfig {
-        //we assert that the project exists
-        return config.projects.first { it.identifier == projectInfo.config.identifier }
     }
 }

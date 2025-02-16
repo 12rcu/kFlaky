@@ -58,8 +58,10 @@ is taken care of by the config.
 - logDir: the relative dir from the base dir to save the logs
 - tmpDir: the relative dir from the base dir to save execution tmp files (this dir can be deleted after execution)
 - worker: the number of processes that are started in parallel. Note: the main limiting factor of java based projects is memory
+- githubQuery: optional, only supported for docker, download github repositories with a query like: `q=tetris+language:assembly&sort=stars&order=desc` see [github api docs](https://docs.github.com/en/rest/search/search?apiVersion=2022-11-28#search-repositories) 
+- projects: all projects, see below
 
-#### project specific
+#### Project configs (optional)
 
 - identifier: an internal identifier for a project, must be unique!
 - framework: the framework the project uses, currently only junit
@@ -123,3 +125,20 @@ is taken care of by the config.
     ]
 }
 ```
+
+#### Sample Docker with GitHub:
+
+```json
+{
+  "baseDir": "/app",
+  "logDir": "logs",
+  "tmpDir": "temp",
+  "worker": 2,
+  "githubQuery": {
+    "token": "<token>",
+    "query": "q=language:kotlin+pushed:>2020-01-01+stars:50..750+size:<500000&sort=stars&order=desc&per_page=3"
+  }
+}
+```
+
+Generate a Github token [here](https://github.com/settings/tokens)

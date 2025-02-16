@@ -5,14 +5,14 @@
   "worker": 2,
   "projects": [
     {
-      "identifier": "monstera",
+      "identifier": "k-markdown",
       "framework": "junit",
       "language": "kotlin",
-      "projectUri": "https://github.com/LotsOfPixelsStudios/Monstera.git",
+      "projectUri": "https://github.com/JetBrains/markdown.git",
       "testExecutionCommand": "./gradlew test",
-      "testResultDir": "build/test-results",
+      "testResultDir": "",
       "testExecutionDir": "",
-      "testDir": "src/test/kotlin",
+      "testDir": "src",
       "strategy": "TUSCAN_SQUARES",
       "preRuns": 10
     }

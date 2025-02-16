@@ -1,12 +1,12 @@
 package de.matthiasklenz.kflaky
 
 import de.matthiasklenz.kflaky.adapters.mapper.map
+import de.matthiasklenz.kflaky.adapters.github.GithubRequest
 import de.matthiasklenz.kflaky.adapters.project.ProjectConfigDto
 import de.matthiasklenz.kflaky.core.project.ProjectConfig
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.nio.file.Path
-import kotlin.io.path.Path
 
 @Serializable
 data class KFlakyConfigDto(
@@ -14,8 +14,8 @@ data class KFlakyConfigDto(
     val logDir: String = "log",
     val tmpDir: String = "tmp",
     val worker: Int = 8,
-    val projects: List<ProjectConfigDto>,
-    val uiEnable: Boolean = true,
+    val projects: List<ProjectConfigDto> = listOf(),
+    val githubQuery: GithubRequest? = null,
 )
 
 fun loadConfig(path: Path): KFlakyConfig {
@@ -29,5 +29,5 @@ data class KFlakyConfig(
     val tmpDir: Path,
     val worker: Int,
     val projects: List<ProjectConfig>,
-    val uiEnable: Boolean,
+    val githubQuery: GithubRequest?
 )

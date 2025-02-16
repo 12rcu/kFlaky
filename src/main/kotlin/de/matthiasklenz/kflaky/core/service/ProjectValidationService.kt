@@ -1,47 +1,39 @@
 package de.matthiasklenz.kflaky.core.service
 
-import de.matthiasklenz.kflaky.adapters.persistence.SqlLiteDB
-import de.matthiasklenz.kflaky.core.execution.OsCommand
+import de.matthiasklenz.kflaky.core.execution.KFlakyExecutionRecipeTask
 import de.matthiasklenz.kflaky.core.execution.RunType
 import de.matthiasklenz.kflaky.core.middleware.KFlakyLogger
 import de.matthiasklenz.kflaky.core.project.ProjectInfo
-import de.matthiasklenz.kflaky.core.tasks.TestOutcomeInfo
+import de.matthiasklenz.kflaky.core.project.ProjectState
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class ProjectValidationService : KoinComponent {
-    private val sqlLiteDB: SqlLiteDB by inject()
     private val logger: KFlakyLogger by inject()
 
     suspend fun validate(runId: Int, projectInfo: ProjectInfo): Boolean {
         val log = logger.get("ProjectValidation")
+        log.info("Start validation of project ${projectInfo.config.identifier}")
+        projectInfo.progress.state = ProjectState.VALIDATING
+        projectInfo.progress.testsToRun = 1
+        projectInfo.progress.index.set(0)
+        val task = KFlakyExecutionRecipeTask(
+            projectInfo,
+            runId,
+            -1,
+            RunType.PRE_RUN,
+            {}
+        ) { _ -> listOf() }
 
-        OsCommand().executeTestCommand(
-            projectInfo.config.testCommand,
-            projectInfo.config.projectPath.toFile(),
-            "ValidationRunner"
-        )
-
-        val resultDir = if(projectInfo.config.testResultDir != "") {
-            projectInfo.config.projectPath.resolve(projectInfo.config.testResultDir)
-        } else {
-            projectInfo.config.projectPath
+        val results = try {
+             task.execute(0)
+        } catch (e: Exception) {
+            log.warn("Error while project validation: ${e.message}")
+            e.printStackTrace()
+            0
         }
 
-        val testSuitResults = projectInfo.config
-            .testResultCollector
-            .collect(resultDir) { listOf() }
-
-        if(testSuitResults.isEmpty()) {
-            log.error("Could not find test results for ${projectInfo.config.identifier}!")
-            return false
-        }
-
-        sqlLiteDB.addTestResult(
-            TestOutcomeInfo(runId, -1, RunType.PRE_RUN, testSuitResults),
-            projectInfo.config.identifier
-        )
-
-        return true
+        log.info("Finish validation of project ${projectInfo.config.identifier}, found $results test results")
+        return results > 0
     }
 }

@@ -14,6 +14,6 @@ fun KFlakyConfigDto.map(): KFlakyConfig {
         basePath.resolve(tmpDir),
         worker,
         projects.map { it.map() },
-        uiEnable
+        githubQuery
     )
 }
