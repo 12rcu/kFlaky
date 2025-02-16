@@ -27,3 +27,20 @@ RUN export JAVA_HOME=/usr/lib/jvm/openjdk-23
 # ...
 ENTRYPOINT ["java", "-jar", "kFlkay.jar"]
 ````
+
+## Use a different base image
+
+Make sure to edit the version of kFlkay you want to use!
+
+````dockerfile
+FROM ubuntu:22.04
+WORKDIR /app
+RUN apt update
+RUN apt install git openjdk-11-jdk maven -y
+RUN export JAVA_HOME=/usr/lib/jvm/openjdk-11
+RUN export MAVEN_OPTS="-Xmx4096M" # increase memory limit for maven executions
+
+ADD https://github.com/12rcu/kFlaky/releases/download/0.2.5/jdk21-kFlaky.jar kFlkay.jar
+
+ENTRYPOINT ["java", "-Xmx4096M", "-jar", "kFlkay.jar"]
+````

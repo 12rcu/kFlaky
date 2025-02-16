@@ -69,7 +69,7 @@ class LoadProjectService : KoinComponent {
             val targetDir = config
                 .tmpDir
                 .resolve("projects")
-                .resolve("${it.name}_${it.id.toString().take(3)}")
+                .resolve("${it.name}_${it.id.toString().takeLast(3)}")
                 .toFile()
             val status = gitService.download(it.cloneUrl, targetDir)
             if (status != 0) {
