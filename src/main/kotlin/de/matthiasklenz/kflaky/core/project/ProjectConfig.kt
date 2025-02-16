@@ -16,5 +16,5 @@ class ProjectConfig (
     val testCommand: String,
     val testResultCollector: CollectResults,
     val preRuns: Int,
-    val enabled: Boolean
+    var enabled: Boolean
 )

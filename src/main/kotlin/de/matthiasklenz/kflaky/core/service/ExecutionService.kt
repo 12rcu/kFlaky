@@ -31,6 +31,7 @@ class ExecutionService: KoinComponent {
             if(!projectValidationService.validate(runId, it)) {
                 log.error("Could not validate project: ${it.config.identifier}!")
                 //error("Could not validate project: ${it.config.identifier}!")
+                it.config.enabled = false
             }
         }
 
@@ -39,7 +40,7 @@ class ExecutionService: KoinComponent {
         }
 
         launch {
-            projects.forEach {
+            projects.filter { it.config.enabled }.forEach {
                 val workerPool = WorkerPool(config.worker)
                 launch { workerPool.start() }
 
