@@ -35,10 +35,12 @@ class JUnitResultCollection : CollectResults {
                 testSuite.first!!.name,
                 testSuite.second,
                 getTestOrderOf(testSuite.first!!.name),
+                hashMapOf(),
                 mutableListOf()
             )
-            testSuite.first?.testcase?.map { case ->
+            testSuite.first?.testcase?.mapIndexed { index, case ->
                 val outcome = if (case.failure == null) TestOutcome.PASSED else TestOutcome.FAILED
+                result.testIdIndex[index] = case.name
                 result.testResults.add(
                     TestResultData(
                         case.name,
