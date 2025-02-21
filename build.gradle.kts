@@ -31,7 +31,7 @@ dependencies {
     //https://mvnrepository.com/artifact/org.ktorm/ktorm-support-sqlite
     implementation("org.ktorm:ktorm-support-sqlite:4.1.1")
     //https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
-    implementation("org.xerial:sqlite-jdbc:3.49.0.0")
+    implementation("org.xerial:sqlite-jdbc:3.49.1.0")
 
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
     implementation("ch.qos.logback:logback-classic:1.5.16")
