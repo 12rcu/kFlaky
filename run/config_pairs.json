@@ -1,0 +1,32 @@
+{
+    "baseDir": "/",
+    "logDir": "logs",
+    "tmpDir": "temp",
+    "worker": 4,
+    "projects": [
+        {
+            "identifier": "ormlite-alphabetical",
+            "framework": "junit",
+            "language": "java",
+            "projectUri": "/app/ormlite-alphabetical",
+            "testExecutionCommand": "/usr/share/maven/bin/mvn clean test -Dtest=TransactionManagerTest#testDaoTransactionManagerCommitted,{def:suite}#{def:testName}",
+            "testResultDir": "target",
+            "testExecutionDir": "",
+            "testDir": "src/test/java",
+            "strategy": "PAIR_WISE",
+            "preRuns": 0
+        },
+        {
+            "identifier": "ormlite-reverse",
+            "framework": "junit",
+            "language": "java",
+            "projectUri": "/app/ormlite-reverse",
+            "testExecutionCommand": "/usr/share/maven/bin/mvn clean test -Dtest=TransactionManagerTest#testDaoTransactionManagerCommitted,{def:suite}#{def:testName}",
+            "testResultDir": "target",
+            "testExecutionDir": "",
+            "testDir": "src/test/java",
+            "strategy": "PAIR_WISE",
+            "preRuns": 0
+        }
+    ]
+}

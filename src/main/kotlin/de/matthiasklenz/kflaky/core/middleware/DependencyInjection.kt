@@ -28,6 +28,7 @@ fun configureDj(initModule: Module) {
                 single { WorkerService() }
                 single { ClassificationService() }
                 single { ProjectValidationService() }
+                single { PairWiseSchedulerService() }
             }
         )
     }

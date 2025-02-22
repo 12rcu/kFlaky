@@ -5,5 +5,6 @@ enum class TestExecutionStrategy {
     RANDOM,
     REVERSE,
     INITIAL,
+    PAIR_WISE,
     SKIP
 }

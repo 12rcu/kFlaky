@@ -39,7 +39,7 @@ class OsCommand: KoinComponent {
             l.warn("[$worker] ERROR: exit code $exitCode for command: $command in dir: ${directory.absolutePath}")
     }
 
-    suspend fun setExecPerms(command: String, directory: File) {
+    fun setExecPerms(command: String, directory: File) {
         val file = command.split(" ").firstOrNull() ?: ""
         val execFile =  if(file.startsWith(".")) {
             directory.toPath().resolve(file)

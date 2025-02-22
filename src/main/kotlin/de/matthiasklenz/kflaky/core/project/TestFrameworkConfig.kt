@@ -6,6 +6,8 @@ interface TestFrameworkConfig {
         KOTLIN
     }
 
+    val frameworkUtil: FrameworkUtil?
+
     val language: Language
     val testAnnotation: Regex
 

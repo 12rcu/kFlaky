@@ -4,9 +4,11 @@ services:
     container_name: kFlaky
     volumes:
       - ./run/default.db:/app/default.db
-      - ./run/docker/github-config.json:/app/config.json
+      - ./run/config_pairs.json:/app/config.json
       - ./run/logs:/app/logs
       - ./run/temp:/app/temp
+      - /home/matthias/Documents/opensource/ormlite-core:/app/ormlite-alphabetical
+      - /home/matthias/Documents/opensource/ormlite-core-reverse:/app/ormlite-reverse
     deploy:
       resources:
         limits:
