@@ -6,9 +6,7 @@ Annotations are used to change the test order of set tests, and thus recognize o
 
 ## Usage
 
-Usage is currently a bit tricky as no working dockerfiles are provided (hopefully this will change soon).
-Modify the config.json in the root directory of this project and edit the paths to the project you want to test. 
-See the usage page for more information.
+See the "usage" page or the "bring our own docker image" page if this is something you need.
 
 ## Contributing
 
