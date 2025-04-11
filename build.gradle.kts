@@ -24,7 +24,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
 
     // https://mvnrepository.com/artifact/io.insert-koin/koin-core-coroutines
-    implementation("io.insert-koin:koin-core-coroutines:4.1.0-Beta5")
+    implementation("io.insert-koin:koin-core-coroutines:4.1.0-Beta7")
     
     //sql
     implementation("org.ktorm:ktorm-core:4.1.1")
