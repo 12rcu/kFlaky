@@ -18,7 +18,7 @@ application {
 
 dependencies {
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.18.3")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
     testImplementation(kotlin("test"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
